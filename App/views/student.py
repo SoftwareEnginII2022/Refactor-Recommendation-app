@@ -12,7 +12,7 @@ from App.controllers import (
 student_views = Blueprint('student_views', __name__, template_folder='../templates')
 
 # SEARCH STAFF
-@student_views.route('/search', methods=['GET'])
+@student_views.route('/student/search', methods=['GET'])
 @jwt_required()
 def searchStaff():
     id = current_identity.id

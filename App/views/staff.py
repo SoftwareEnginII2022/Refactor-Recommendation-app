@@ -16,7 +16,7 @@ staff_views = Blueprint('staff_views', __name__, template_folder='../templates')
 
 
 # VIEW NOTIFICATION FEED
-@staff_views.route('/notifications', methods=['GET'])
+@staff_views.route('/staff/notifications', methods=['GET'])
 @jwt_required()
 def view_user_feed():
     staffID = current_identity.id
@@ -35,7 +35,7 @@ def get_staff_page():
     return render_template('users.html', users=staff)
 
 # JSON view all Staff
-@staff_views.route('/staff', methods=['GET'])
+@staff_views.route('/staff/all', methods=['GET'])
 def staff():
     staff = get_all_staff_json()
     if staff:
@@ -43,7 +43,7 @@ def staff():
     return ("No staff users recorded")
 
 # JSON view all staff + their notification feed
-@staff_views.route('/staff/feeds', methods=['GET'])
+@staff_views.route('/staff/feed', methods=['GET'])
 def staff_notifs():
     staff = get_all_staff_notifs_json()
     if staff:

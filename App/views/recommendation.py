@@ -26,7 +26,7 @@ def sendRecommendation():
 
 
 # VIEW RECOMMENDATION
-@recommendation_views.route('/recommendations/<recID>', methods=['GET'])
+@recommendation_views.route('/student/recommendations/<recID>', methods=['GET'])
 @jwt_required()
 def view_recommendation(recID):
     studID = current_identity.id
@@ -44,7 +44,7 @@ def view_recommendation(recID):
 
 # routes for testing purposes
 # View all recommendations for all users
-@recommendation_views.route('/recs', methods=['GET'])
+@recommendation_views.route('/student/recs', methods=['GET'])
 def get_all_recs():
     return jsonify(get_all_recommendations_json())
     
