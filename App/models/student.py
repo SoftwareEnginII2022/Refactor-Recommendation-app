@@ -3,24 +3,13 @@ from App.models import User
 
 class Student(User):
     studentID = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    # student has a list of recommendation objects
-    recommendationList = db.relationship('Recommendation', backref=db.backref('student', lazy='joined'))
+    Requests = db.relationship('RequestRecommendation', backref='student', lazy=True, cascade="all, delete-orphan")
     
     def toJSON(self):
         return{
             'studentID': self.studentID,
             'email': self.email,
-            'userType': self.userType,
             'firstName': self.firstName,
             'lastName': self.lastName,
-        }
-        
-    def toJSON_with_recommendations(self):
-        return{
-            'studentID': self.studentID,
-            'email': self.email,
-            'userType': self.userType,
-            'firstName': self.firstName,
-            'lastName': self.lastName,
-            'recommendationList': [recommendation.toJSON() for recommendation in self.recommendationList]
+            'requests': [req.toJSON() for req in self.Requests]
         }

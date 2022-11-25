@@ -1,25 +1,30 @@
 from App.database import db
+from datetime import date
+import enum
+
+class Status(enum.Enum):
+    READ = "Read"
+    UNREAD = "Unread"
+    COMPLETED = "Completed"
 
 class Notification(db.Model):
-    notifID = db.Column(db.Integer, primary_key=True)
-    # who it was sent to
-    sentToStaffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
-    # who sent it
-    sentFromStudentID = db.Column(db.Integer, db.ForeignKey('student.studentID'))
-    requestBody = db.Column(db.String, nullable=False)
-    status = db.Column(db.String, nullable=False)
+    notificationID = db.Column(db.Integer, primary_key=True)
+    reqID = db.Column(db.Integer, db.ForeignKey('requestrecommendation.reqID'))
+    staffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
+    deadline = db.Column(db.Date, nullable= False, default= date(1970,1,1))
+    status = db.Column(db.Enum(Status), nullable=False, default=Status.UNREAD)
 
-    def __init__(self, sentToStaffID,sentFromStudentID, requestBody):
-        self.sentToStaffID = sentToStaffID
-        self.sentFromStudentID=sentFromStudentID
-        self.requestBody=requestBody
-        self.status="unread"
+    def __init__(self, reqID,staffID, deadline):
+        self.reqID = reqID
+        self.staffID=staffID
+        self.deadline=deadline
+        self.status=Status.UNREAD
         
     def toJSON(self):
         return{
-            'notifID': self.notifID,
-            'sentToStaffID': self.sentToStaffID,
-            'sentFromStudentID': self.sentFromStudentID,
-            'requestBody': self.requestBody,
+            'notificationID': self.notificationID,
+            'reqID': self.reqID,
+            'staffID': self.staffID,
+            'deadline': self.deadline,
             'status': self.status
         }

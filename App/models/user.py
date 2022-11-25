@@ -5,14 +5,12 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email =  db.Column(db.String, unique=True,nullable=False)
     password = db.Column(db.String(120), nullable=False)
-    userType = db.Column(db.String, nullable=False)
     firstName = db.Column(db.String, nullable=False)
     lastName = db.Column(db.String, nullable=False)
 
-    def __init__(self, email, password, userType, firstName, lastName):
+    def __init__(self, email, password, firstName, lastName):
         self.email = email
         self.set_password(password)
-        self.userType=userType
         self.firstName=firstName
         self.lastName=lastName
 
@@ -20,7 +18,6 @@ class User(db.Model):
         return{
             'id': self.id,
             'email': self.email,
-            'userType': self.userType,
             'firstName': self.firstName,
             'lastName': self.lastName
         }

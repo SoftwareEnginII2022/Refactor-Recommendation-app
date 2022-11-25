@@ -2,21 +2,21 @@ from App.database import db
 
 class Recommendation(db.Model):
     recID = db.Column(db.Integer, primary_key=True)
-    sentFromStaffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
-    sentToStudentID = db.Column(db.Integer, db.ForeignKey('student.studentID'))
-    recURL = db.Column(db.String, nullable=False)
+    reqID = db.Column(db.Integer, db.ForeignKey('requestrecommendation.reqID'))
+    staffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
+    comments = db.Column(db.String, nullable=False)
 
-    def __init__(self, sentFromStaffID,sentToStudentID, recURL):
-        self.sentFromStaffID = sentFromStaffID
-        self.sentToStudentID=sentToStudentID
-        self.recURL=recURL
+    def __init__(self, reqID,staffID, comments):
+        self.reqID=reqID
+        self.staffID=staffID
+        self.comments=comments
     
     def toJSON(self):
         return{
             'recID': self.recID,
-            'sentFromStaffID': self.sentFromStaffID,
-            'sentToStudentID': self.sentToStudentID,
-            'recURL': self.recURL
+            'reqID': self.reqID,
+            'staffID': self.staffID,
+            'comments': self.comments
         }
 
     
