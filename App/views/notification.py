@@ -55,6 +55,7 @@ def approve_request(notifID):
 
 
 # Routes for testing purposes
+
 # get all notification objects
 @notification_views.route('/notifs', methods=['GET'])
 def get_all_notifications():
