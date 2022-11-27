@@ -3,30 +3,32 @@ from App.database import db
 from sqlalchemy.exc import IntegrityError
 from App.controllers import get_staff
 
-def create_notification(sentToStaffID,sentFromStudentID,requestBody):
-    newNotif = Notification(sentToStaffID=sentToStaffID,sentFromStudentID=sentFromStudentID, requestBody=requestBody)
+def create_notification(reqID,staffID,deadline):
+    newNotif = Notification(reqID=reqID,staffID=staffID, deadline=deadline)
     return newNotif
 
-def send_notification(sentFromStudentID, requestBody, sentToStaffID):
+def send_notification(reqID, deadline, staffID):
     # get staff feed - notif list
-    staff = get_staff(sentToStaffID)
+    staff = get_staff(staffID)
     # new notif
-    newNotif = create_notification(sentToStaffID, sentFromStudentID, requestBody)
+    newNotif = create_notification(staffID, reqID, deadline)
     try:
         db.session.add(newNotif)
         db.session.commit()
     except IntegrityError:
         db.session.rollback()
         return None
+        
+    # Should not need to append this, as the relationship will have it here already
     # add notif to list
-    staff.notificationFeed.append(newNotif)
-    try:
-        db.session.add(staff)
-        db.session.commit()
-    except IntegrityError:
-        db.session.rollback()
-        return None
-    return staff
+    # staff.Notification.append(newNotif)
+    # try:
+    #     db.session.add(staff)
+    #     db.session.commit()
+    # except IntegrityError:
+    #     db.session.rollback()
+    #     return None
+    # return staff
 
 def get_all_notifs():
     return Notification.query.all()

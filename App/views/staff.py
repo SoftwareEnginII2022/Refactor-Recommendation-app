@@ -9,19 +9,19 @@ from App.controllers import (
     get_staff_by_name,
     get_staff_by_firstName,
     get_staff_by_lastName,
-    get_staff_feed_json
+    get_staff_notification_feed_json
 )
 
 staff_views = Blueprint('staff_views', __name__, template_folder='../templates')
 
 
 # VIEW NOTIFICATION FEED
-@staff_views.route('/staff/notifications', methods=['GET'])
+@staff_views.route('/notifications', methods=['GET'])
 @jwt_required()
 def view_user_feed():
     staffID = current_identity.id
     if get_staff(staffID):
-        notifs = get_staff_feed_json(staffID)
+        notifs = get_staff_notification_feed_json(staffID)
         if notifs:
             return jsonify(notifs)
         return Response('no notifications found for this user', status=404)

@@ -6,13 +6,13 @@ from App.controllers import (
     search_staff,
     get_all_students,
     get_all_students_json,
-    get_student_reclist_json
+    get_student_request_json
 )
 
 student_views = Blueprint('student_views', __name__, template_folder='../templates')
 
 # SEARCH STAFF
-@student_views.route('/student/search', methods=['GET'])
+@student_views.route('/staff', methods=['GET'])
 @jwt_required()
 def searchStaff():
     id = current_identity.id
@@ -37,16 +37,16 @@ def searchStaff():
     return Response({"staff cannot perform this action"}, status=401)
 
 
-# VIEW RECOMMENDATION LISTING
-@student_views.route('/recommendations', methods=['GET'])
+# VIEW REQUEST LISTING
+@student_views.route('/request', methods=['GET'])
 @jwt_required()
-def get_recommendations():
+def get_requests():
     studentID = current_identity.id
     if get_student(studentID):
-        recs = get_student_reclist_json(studentID)
+        recs = get_student_request_json(studentID)
         if recs:
             return jsonify(recs)
-        return Response({'no recommendations found for this user'}, status=404)
+        return Response({'no requests found for this user'}, status=404)
     return Response("staff cannot perform this action", status=401)
 
 

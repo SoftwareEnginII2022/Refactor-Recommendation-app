@@ -22,7 +22,7 @@ def get_all_staff_notifs_json():
     staff = get_all_staff()
     if not staff:
         return None
-    staff = [staf.toJSON_with_notifications() for staf in staff]
+    staff = [staf.toJSON() for staf in staff]
     return staff
 
 def get_staff_by_firstName(firstName):
@@ -50,23 +50,22 @@ def search_staff(type, keyword):
     if (type=="ID"):
         staff = get_staff(keyword)
         return staff.toJSON()
-    else:
-        if (type=="name"):
-            name=keyword.split(",")
-            return get_staff_by_name(name[0], name[1])
-        if (type=="firstName"):
-            return get_staff_by_firstName(keyword)
-        if (type=="lastName"):
-            return get_staff_by_lastName(keyword)
+    elif (type=="name"):
+        name=keyword.split(",")
+        return get_staff_by_name(name[0], name[1])
+    elif (type=="firstName"):
+        return get_staff_by_firstName(keyword)
+    elif (type=="lastName"):
+        return get_staff_by_lastName(keyword)
     return None
 
-def get_staff_feed(staffID):
+def get_staff_notification_feed(staffID):
     staff = get_staff(staffID)
-    return staff.notificationFeed
+    return staff.Notification
 
 # get the notification feed for the current user
-def get_staff_feed_json(staffID):
-    notifs = get_staff_feed(staffID)
+def get_staff_notification_feed_json(staffID):
+    notifs = get_staff_notification_feed(staffID)
     if notifs:
         return [notif.toJSON() for notif in notifs]
     return None
