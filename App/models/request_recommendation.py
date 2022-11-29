@@ -2,6 +2,7 @@ from App.database import db
 from datetime import date
 
 class Request_Recommendation(db.Model):
+    __tablename__ = "request_recommendation"
     reqID = db.Column(db.Integer, primary_key=True)
     staffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
     studentID = db.Column(db.Integer, db.ForeignKey('student.studentID'))
