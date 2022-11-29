@@ -9,7 +9,7 @@ class Status(enum.Enum):
 
 class Notification(db.Model):
     notificationID = db.Column(db.Integer, primary_key=True)
-    reqID = db.Column(db.Integer, db.ForeignKey('requestrecommendation.reqID'))
+    reqID = db.Column(db.Integer, db.ForeignKey('Request_Recommendation.reqID'))
     staffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
     deadline = db.Column(db.Date, nullable= False, default= date(1970,1,1))
     status = db.Column(db.Enum(Status), nullable=False, default=Status.UNREAD)

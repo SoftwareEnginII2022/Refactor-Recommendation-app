@@ -2,8 +2,8 @@ from App.database import db
 
 class Recommendation(db.Model):
     recID = db.Column(db.Integer, primary_key=True)
-    reqID = db.Column(db.Integer, db.ForeignKey('requestrecommendation.reqID'))
     staffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
+    reqID = db.Column(db.Integer, db.ForeignKey('requestrecommendation.reqID'))
     comments = db.Column(db.String, nullable=False)
 
     def __init__(self, reqID,staffID, comments):

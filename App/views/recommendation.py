@@ -6,7 +6,7 @@ from App.controllers import (
     get_all_recommendations_json,
     get_student,
     get_recommendation,
-    get_student_reclist_json
+    get_student_request_json
 )
 
 recommendation_views = Blueprint('recommendation_views', __name__, template_folder='../templates')
@@ -32,7 +32,7 @@ def view_recommendation(recID):
     studID = current_identity.id
     student = get_student(studID)
     if student:
-        recs = get_student_reclist_json(studID)
+        recs = get_student_request_json(studID)
         if not recs:
             return Response({"no recommendations found for this user"}, status=404)
         rec = get_recommendation(studID, recID)
