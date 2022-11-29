@@ -3,7 +3,7 @@ from App.models import User
 
 class Student(User):
     studentID = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    Requests = db.relationship('RequestRecommendation', backref='student', lazy=True, cascade="all, delete-orphan")
+    Requests = db.relationship('Request_Recommendation', backref='student', lazy=True, cascade="all, delete-orphan")
     
     def toJSON(self):
         return{
