@@ -34,7 +34,7 @@ def signupAction():
         db.session.commit()  # save user
         login_user(newuser)  # login the user
         flash(data['userType'].capitalize() + 'Account Created!')  # send message
-        return redirect(url_for('index_views.login_page'))  # redirect to homepage
+        return redirect('/app')  # redirect to homepage
     except IntegrityError:  # attempted to insert a duplicate user
         db.session.rollback()
         flash("Email already exists")  # error message

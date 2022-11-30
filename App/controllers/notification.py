@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from App.controllers import get_staff
 
 def create_notification(reqID,staffID,deadline):
-    newNotif = Notification(reqID=reqID,staffID=staffID, deadline=deadline)
+    newNotif = Notification(reqID=reqID,staffID=staffID, timestamp=deadline)
     return newNotif
 
 def send_notification(reqID, deadline, staffID):
