@@ -1,10 +1,21 @@
 {% extends "layout.html" %}
-{% block title %}Flask MVC App{% endblock %}
-{% block page %}Flask MVC App{% endblock %}
+{% block title %}Homepage | Recommendation Platform{% endblock %}
+{% block page %}Homepage{% endblock %}
+
+{% block link%}
+<ul id="nav-mobile" class="right">
+    <li><a href="/signup">Sign Up</a></li>
+    <li><a href="/login">Login</a></li>
+    <li><a href="/logout">Logout</a></li>
+</ul>
+{% endblock %}
 
 {{ super() }}
 
 {% block content %}
-    <h1>Flask MVC</h1>
-    <p>This is a boileplate flask application which follows the MVC pattern for structuring the project.</p>
+<h1>Flask MVC</h1>
+{% if current_user and current_user.is_authenticated %}
+<h3>Hi {{ current_user.email }}! You are a {{ current_user.getType() }}</h3>
+{% endif %}
+<p>This is a boileplate flask application which follows the MVC pattern for structuring the project.</p>
 {% endblock %}

@@ -6,10 +6,13 @@ class Student(User):
     Requests = db.relationship('Request_Recommendation', backref='student', lazy=True, cascade="all, delete-orphan")
     
     def toJSON(self):
-        return{
+        return {
             'studentID': self.studentID,
             'email': self.email,
             'firstName': self.firstName,
             'lastName': self.lastName,
             'requests': [req.toJSON() for req in self.Requests]
         }
+    
+    def getType(self):
+        return "student"

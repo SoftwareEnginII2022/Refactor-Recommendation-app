@@ -14,3 +14,6 @@ class Staff(User):
             'notifications': [notif.toJSON() for notif in self.Notification]
         }
     
+    def getType(self):
+        return "staff"
+    

@@ -11,24 +11,19 @@ def create_user(email, password, userType, firstName, lastName):
         newuser = Staff(email=email, password=password, firstName=firstName, lastName=lastName)
     return newuser
 
-# SIGNUP
-def user_signup(firstName, lastName, email, password, userType):
-    newuser = create_user(email=email,
-        password=password,
-        userType=userType,
-        firstName=firstName,
-        lastName=lastName)
-    try:
-        db.session.add(newuser)
-        db.session.commit()
-    except IntegrityError: # attempted to insert a duplicate user
-        db.session.rollback()
-        return Response({'user already exists with this email'}, status=400) #error message
-    return Response({'user created successfully'}, status=201) # success
 
 # get User by id
 def get_user(id):
-    return User.query.get(id)
+    user = Student.query.get(id)
+    if not user:
+        user = Staff.query.get(id)
+    if not user:
+        user = User.query.get(id)
+    return user
+
+# get User by email
+def get_user_by_email(email):
+    return User.query.filter_by(email=email).first()
 
 # get all User objects
 def get_all_users():

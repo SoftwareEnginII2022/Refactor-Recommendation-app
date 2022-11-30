@@ -11,7 +11,8 @@ from datetime import timedelta
 from App.database import create_db
 
 from App.controllers import (
-    setup_jwt
+    setup_jwt,
+    get_user,
 )
 
 from App.views import (
@@ -33,6 +34,19 @@ views = [
     notification_views,
     recommendation_views
 ]
+
+
+''' Begin Flask Login Functions '''
+login_manager = LoginManager()
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return get_user(user_id)
+
+
+''' End Flask Login Functions '''
+''' Begin boilerplate code '''
 
 def add_views(app, views):
     for view in views:
@@ -69,6 +83,7 @@ def create_app(config={}):
     configure_uploads(app, photos)
     add_views(app, views)
     create_db(app)
-    setup_jwt(app)
+    # setup_jwt(app)
+    login_manager.init_app(app)
     app.app_context().push()
     return app
