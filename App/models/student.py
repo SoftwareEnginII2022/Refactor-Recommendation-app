@@ -7,7 +7,7 @@ class Student(User):
     
     def toJSON(self):
         return {
-            'studentID': self.studentID,
+            'studentID': self.id,
             'email': self.email,
             'firstName': self.firstName,
             'lastName': self.lastName,

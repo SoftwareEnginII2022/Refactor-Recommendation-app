@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify, request, send_from_directory, Response, redirect, url_for
+from flask import Blueprint, render_template, jsonify, request, send_from_directory, Response, redirect, url_for, session
 from flask_login import login_required, current_user
 
 from App.controllers import (
@@ -6,7 +6,8 @@ from App.controllers import (
     send_notification,
     get_all_notifs_json,
     get_staff,
-    # approve_notif,
+    accept_request,
+    reject_request,
     get_notification
 )
 
@@ -19,7 +20,35 @@ def view_notif(notificationID):
     if get_staff(current_user.id):
         notif = get_notification(notificationID)
         notif = set_notification_seen(notif)
+        session['notif_url'] = url_for('notification_views.view_notif', notificationID=notificationID)
+        print("Session url")
+        print(session['notif_url'])
         return render_template('notif/view.html', notif=notif)
+    return redirect(url_for('index_views.homepage'))
+
+
+# Accept request by ID
+@notification_views.route('/request/<reqID>/accept', methods=['GET'])
+@login_required
+def accept_request_action(reqID):
+    if get_staff(current_user.id):
+        accept_request(reqID)
+        if 'notif_url' in session:
+            return redirect(session['notif_url'])
+        else:
+            return redirect(url_for('index_views.homepage'))
+    return redirect(url_for('index_views.homepage'))
+
+# Reject request by ID
+@notification_views.route('/request/<reqID>/reject', methods=['GET'])
+@login_required
+def reject_request_action(reqID):
+    if get_staff(current_user.id):
+        reject_request(reqID)
+        if 'notif_url' in session:
+            return redirect(session['notif_url'])
+        else:
+            return redirect(url_for('index_views.homepage'))
     return redirect(url_for('index_views.homepage'))
 
 # SEND REQUEST TO STAFF MEMBER

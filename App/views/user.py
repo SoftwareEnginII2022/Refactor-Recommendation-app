@@ -9,6 +9,7 @@ from App.controllers import (
     get_all_users,
     get_all_users_json,
     get_user,
+    get_all_requests_json,
     get_user_by_email,
 )
 
@@ -83,4 +84,17 @@ def client_app():
 # STATIC View all Users
 @user_views.route('/static/users', methods=['GET'])
 def static_user_page():
-  return send_from_directory('static', 'static-user.html')
+  return send_from_directory('static/user', 'index.html')
+
+
+# JSON View all Users
+@user_views.route('/requests')
+def client_app_requests():
+    requests = get_all_requests_json()
+    print(requests)
+    return jsonify(requests)
+
+# STATIC View all Requests
+@user_views.route('/static/requests', methods=['GET'])
+def static_user_page_requests():
+  return send_from_directory('static/request', 'index.html')

@@ -62,8 +62,7 @@ def get_notification(notifID):
 
     return notif
 
-def set_notification_seen(notificationID):
-    notif = get_notification(notificationID)
+def set_notification_seen(notif):
     notif.seen = True
     try:
         db.session.add(notif)
