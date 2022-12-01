@@ -1,8 +1,9 @@
 from flask import Blueprint, redirect, render_template, request, send_from_directory
-from flask_login import LoginManager, login_required
+from flask_login import login_required, current_user
 
 from App.controllers import (
-    get_user,
+    get_staff,
+    get_staff_notification
 )
 
 index_views = Blueprint('index_views', __name__, template_folder='../templates')
@@ -23,7 +24,8 @@ def signup_page():
 
 @index_views.route('/app', methods=['GET'])
 @login_required
-def login_required():
+def homepage():
+    if get_staff(current_user.id):
+        notifs = get_staff_notification(current_user.staffID)
+        return render_template('notif/index.html', notifs=notifs)
     return render_template('index.html')
-#   todos = todos = Todo.query.filter_by(userid=current_user.id).all()
-#   return render_template('todo.html', todos=todos)

@@ -2,9 +2,11 @@ import click, pytest, sys
 from flask import Flask
 from flask.cli import with_appcontext, AppGroup
 
+from datetime import datetime, timedelta
 from App.database import create_db, get_migrate
 from App.main import create_app
 from App.controllers import (
+    create_request,
     create_user,
     get_all_users_json,
     get_all_users
@@ -63,6 +65,13 @@ Generic Commands
 def initialize():
     create_db(app)
     print('database intialized')
+
+@app.cli.command("mockup_rec_req")
+def mockup_reccommendation_request():
+    student = create_user("student@email.com", "student", "student", "Stu", "Dent")
+    staff = create_user("staff@email.com", "staff", "staff", "St", "Aff")
+
+    rec_req = create_request(staff.staffID, student.studentID, datetime.now() + datetime.timedelta(days=7), "Hi, I am a student. Please send me a recommendation!")
 
 '''
 Test Commands
