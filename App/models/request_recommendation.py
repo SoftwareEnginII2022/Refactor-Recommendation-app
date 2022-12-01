@@ -11,7 +11,7 @@ class Status(Enum):
     ACCEPTED = "Accepted"
     REJECTED = "Rejected"
     COMPLETED = "Completed"
-
+    EXPIRED = "Expired"
 
 class Request_Recommendation(db.Model):
     __tablename__ = "request_recommendation"
