@@ -4,7 +4,14 @@ from sqlalchemy.exc import IntegrityError
 
 def create_request(staffID, studentID, deadline, requestBody):
     newreq = Request_Recommendation(staffID, studentID, deadline, requestBody)
-    return newreq
+    try:
+            db.session.add(newreq)
+            db.session.commit()
+            return newreq
+    except IntegrityError:
+            db.session.rollback()
+            return None
+    
 
 def send_request(reqID, staffID, comments):
     student = Student.query.get(staffID)
@@ -29,8 +36,21 @@ def send_request(reqID, staffID, comments):
 def get_all_requests():
     return Request_Recommendation.query.all()
 
+def get_all_student_requests(id):
+    request = Request_Recommendation.query.filter_by(studentID = id)
+    if not request:
+        return None
+    return request
+
 def get_all_requests_json():
     recs = get_all_requests()
+    if not recs:
+        return None
+    recs = [rec.toJSON() for rec in recs]
+    return recs
+
+def get_all_student_requests_json(id):
+    recs = get_all_student_requests(id)
     if not recs:
         return None
     recs = [rec.toJSON() for rec in recs]

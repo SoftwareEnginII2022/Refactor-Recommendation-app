@@ -22,6 +22,7 @@ from App.views import (
     staff_views,
     notification_views,
     recommendation_views,
+    requestRec_views,
 )
 
 # New views must be imported and added to this list
@@ -32,7 +33,8 @@ views = [
     student_views,
     staff_views,
     notification_views,
-    recommendation_views
+    recommendation_views,
+    requestRec_views
 ]
 
 

@@ -12,34 +12,64 @@
 
 {% block content %}
 <main class="container">
-    <div id="card">
-        <form>
-            <input placeholder="staffID" id="staffID" type="text"/>
-            <input placeholder="requestBody" id="requestBody" type="text"/>
-            <input placeholder="deadline" id="deadline" type="date"/>
-            <input type="submit">
+    <div id="card col s12" style="padding:1em">
+
+        <form action="/requestRec" method="POST">
+            <div class="row">
+                <div classs="input-field col s12">
+                    <label for="staffID">Staff</label>
+                    <select placeholder="staffID" name="staffID" id="staffID" style="display:inline">
+                        {% if teachers %}
+                        {% for t in teachers %}
+                            <option value="none" selected disabled hidden>Select a Teacher</option>
+                            <option value="{{t.staffID}}">{{t.firstName}} {{t.lastName}} </option>
+                        {% endfor %}
+                        {% else %}
+                        <option> No staff available</option>
+                        {% endif %}
+                    </select>
+                </div>
+                <div classs="input-field col s12">
+                    <label for="requestBody">Request Body</label>
+                    <input placeholder="Enter a message here" name="requestBody" id="requestBody" type="text"/>
+                </div>
+                <div classs="input-field col s12">
+                    <label for="deadline">Deadline</label>
+                    <input placeholder="01-01-1970" name = "deadline" id="deadline" type="date"/>
+                </div>
+
+                <div classs="card-action">
+                    <input type="submit" class="blue text-white btn">
+                </div>
+                
+            </div>
+            
         </form>
     </div>
-    {% if r %}
+    {% if requests %}
         <table>
-            <th>
-                <td>RequestID</thd>
-                <td>Message</td>
-                <td>ProfessorID</td>
-                <td>Date Requested</td>
-                <td>Deadline</td>
-            </th>
-        
+            <tr>
+                <th>RequestID</th>
+                <th>Message</th>
+                <th>ProfessorID</th>
+                <th>Date Requested</th>
+                <th>Deadline</th>
+                <th>Status</th>
+                <th>Recommendation</th>
+            </tr>
         {% for r in requests %}
                 <tr>
-                    <td>{{r.id}}</td>
+                    <td>{{r.reqID}}</td>
                     <td>{{r.requestBody}}</td>
                     <td>{{r.staffID}}</td>
                     <td>{{r.dateRequested}}</td>
-                    <td>{{r.status}}</td>
+                    <td>{{r.deadline}}</td>
+                    <td>{{r.status.value}}</td>
 
                     {% if r.reccomendation %}
                         <a href="#"><td> View Recommendation</td></a>
+                    {% else %}
+                    <td>Not available</td>
                     {% endif %}
                 </tr>         
         {% endfor %}

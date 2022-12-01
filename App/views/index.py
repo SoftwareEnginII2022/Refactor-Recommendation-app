@@ -8,7 +8,6 @@ from App.controllers import (
 
 index_views = Blueprint('index_views', __name__, template_folder='../templates')
 
-
 @index_views.route('/', methods=['GET'])
 def index_page():
     return render_template('index.html')
@@ -21,10 +20,6 @@ def login_page():
 @index_views.route('/signup', methods=['GET'])
 def signup_page():
     return render_template('signup.html')
-
-@index_views.route('/request', methods=['GET'])
-def test_page():
-    return render_template('requestRecommendation.html')
     
 @index_views.route('/app', methods=['GET'])
 @login_required

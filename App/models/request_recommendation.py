@@ -9,7 +9,7 @@ class Status(Enum):
     ACCEPTED = "Accepted"
     REJECTED = "Rejected"
     COMPLETED = "Completed"
-
+    EXPIRED = "Expired"
 
 class Request_Recommendation(db.Model):
     __tablename__ = "request_recommendation"
@@ -27,7 +27,7 @@ class Request_Recommendation(db.Model):
         self.staffID = staffID
         self.studentID = studentID
         self.deadline = deadline
-        self.dateRequested = date.today        
+        self.dateRequested = date.today()       
         self.requestBody=requestBody
         self.status=Status.PENDING
 
