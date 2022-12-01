@@ -1,10 +1,22 @@
-from App.models import Recommendation, Student
+from App.models import Recommendation, Student, Status
 from App.database import db
 from sqlalchemy.exc import IntegrityError
+from App.controllers import (
+    get_request
+)
 
 def create_recommendation(reqID, staffID, comments):
-    newrec = Recommendation(reqID=reqID, staffID=staffID, comments=comments)
-    return newrec
+    req = get_request(reqID)
+
+    if req and req.status == Status.ACCEPTED:
+        newrec = Recommendation(reqID=reqID, staffID=staffID, comments=comments)
+        db.session.add(newrec)
+        db.session.commit()
+        req.complete_request()
+
+        return True
+
+    return False
 
 def send_recommendation(reqID, staffID, comments):
     student = Student.query.get(staffID)

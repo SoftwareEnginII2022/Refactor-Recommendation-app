@@ -13,18 +13,37 @@
 {% block content %}
 <main class="container">
 
-    <!-- <div class="card">
+    <div class="card">
         <div class="card-content">
-            <span class="card-title">Create Todo</span>
-            <form name="addForm" method="POST" action="/todos">
-                <div class="input-field">
-                    <input type="text" name="text" placeholder="enter to-do" class="materialize-textarea"></textarea>
-                    <label for="text">Enter todo Text</label>
+            <span class="card-title">Create Recommendation</span>
+            <form method="POST" action="/recommendation">
+                <div classs="input-field">
+                    <label for="student">Students with accepted requests</label>
+                    <select placeholder="reqID" name="reqDetails" id="student" style="display:inline">
+                        {% if accepted_req_students %}
+                        {% for req in accepted_req_students %}
+                        <option value="-1" selected disabled hidden>Select a student</option>
+                        <option value="{{ req.reqID }},{{ req.Student.getName() }}">{{ req.Student.getName() }}
+                        </option>
+                        {% endfor %}
+                        {% else %}
+                        <option value="-1"> No student requests available or accepted</option>
+                        {% endif %}
+                    </select>
                 </div>
-                <input class="btn blue white-text" type="submit" value="SAVE" />
+                <br />
+                <div class="input-field">
+                    <label for="text">Recommendation Comments</label>
+                    <input type="text" name="comments" placeholder="Enter comments for student recommendation"
+                        class="materialize-textarea"></textarea>
+                </div>
+
+                <div classs="card-action">
+                    <input class="btn green white-text" type="submit" value="SUBMIT" />
+                </div>
             </form>
         </div>
-    </div> -->
+    </div>
 
     <div class="row">
         <table>

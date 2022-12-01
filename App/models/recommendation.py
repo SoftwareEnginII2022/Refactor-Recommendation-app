@@ -6,7 +6,7 @@ class Recommendation(db.Model):
     reqID = db.Column(db.Integer, db.ForeignKey('request_recommendation.reqID'))
     comments = db.Column(db.String, nullable=False)
 
-    def __init__(self, reqID,staffID, comments):
+    def __init__(self, reqID, staffID, comments):
         self.reqID=reqID
         self.staffID=staffID
         self.comments=comments

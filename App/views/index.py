@@ -3,7 +3,8 @@ from flask_login import login_required, current_user
 
 from App.controllers import (
     get_staff,
-    get_staff_notifications
+    get_staff_notifications,
+    get_accepted_request_by_staffID
 )
 
 index_views = Blueprint('index_views', __name__, template_folder='../templates')
@@ -24,7 +25,9 @@ def signup_page():
 @index_views.route('/app', methods=['GET'])
 @login_required
 def homepage():
-    if get_staff(current_user.id):
-        notifs = get_staff_notifications(current_user.staffID)
-        return render_template('notif/index.html', notifs=notifs)
+    userID = current_user.id
+    if get_staff(userID):
+        notifs = get_staff_notifications(userID)
+        accepted_req_students=get_accepted_request_by_staffID(userID)
+        return render_template('notif/index.html', notifs=notifs, accepted_req_students=accepted_req_students)
     return render_template('index.html')

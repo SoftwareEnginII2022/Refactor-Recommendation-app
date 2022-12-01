@@ -23,7 +23,7 @@ class Request_Recommendation(db.Model):
     status = db.Column(db.Enum(Status), nullable = False, default = Status.PENDING)
     requestBody = db.Column(db.String, nullable=False)
 
-    Recommendation = db.relationship('Recommendation', uselist=True, backref='request_recommendation', lazy=True, cascade="all, delete-orphan")
+    Recommendation = db.relationship('Recommendation', uselist=False, backref='request_recommendation', lazy=True, cascade="all, delete-orphan")
 
     def __init__(self, staffID, studentID, deadline, requestBody):
         self.staffID = staffID
