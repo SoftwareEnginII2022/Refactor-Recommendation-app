@@ -1,5 +1,4 @@
 from App.database import db
-from datetime import date
 from App.models import Notification
 from sqlalchemy.sql import func
 from datetime import datetime
@@ -19,9 +18,9 @@ class Request_Recommendation(db.Model):
     reqID = db.Column(db.Integer, primary_key=True)
     staffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
     studentID = db.Column(db.Integer, db.ForeignKey('student.studentID'))
-    dateRequested = db.Column(db.Date, nullable=False, default=date.today)
-    deadline = db.Column(db.Date, nullable= False, default= date(1970,1,1))
-    status = db.Column(db.Enum(Status), nullable = False)
+    dateRequested = db.Column(db.Date, nullable=False, default=func.now())
+    deadline = db.Column(db.DateTime(timezone=True), nullable= False, default= func.now())
+    status = db.Column(db.Enum(Status), nullable = False, default = Status.PENDING)
     requestBody = db.Column(db.String, nullable=False)
 
     Recommendation = db.relationship('Recommendation', uselist=True, backref='request_recommendation', lazy=True, cascade="all, delete-orphan")
@@ -30,7 +29,7 @@ class Request_Recommendation(db.Model):
         self.staffID = staffID
         self.studentID = studentID
         self.deadline = deadline
-        self.dateRequested = date.today        
+        self.dateRequested = datetime.today()
         self.requestBody=requestBody
         self.status=Status.PENDING
 
@@ -66,6 +65,14 @@ class Request_Recommendation(db.Model):
             db.session.commit()
             
         return True
+    
+    def reject_expired_request(self):
+        isExpired = self.deadline < datetime.today()
+
+        if isExpired and (self.status ==  Status.PENDING):
+            self.status = Status.REJECTED
+            db.session.add(self)
+            db.session.commit()
     
     def complete_request(self):
         isExpired = self.deadline < datetime.today()

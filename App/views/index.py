@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 
 from App.controllers import (
     get_staff,
-    get_staff_notification
+    get_staff_notifications
 )
 
 index_views = Blueprint('index_views', __name__, template_folder='../templates')
@@ -30,6 +30,6 @@ def test_page():
 @login_required
 def homepage():
     if get_staff(current_user.id):
-        notifs = get_staff_notification(current_user.staffID)
+        notifs = get_staff_notifications(current_user.staffID)
         return render_template('notif/index.html', notifs=notifs)
     return render_template('index.html')

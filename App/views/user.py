@@ -79,6 +79,7 @@ def get_user_page():
 @user_views.route('/users')
 def client_app():
     users = get_all_users_json()
+    print(users)
     return jsonify(users)
 
 # STATIC View all Users

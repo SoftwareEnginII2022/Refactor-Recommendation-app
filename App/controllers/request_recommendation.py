@@ -48,12 +48,12 @@ def get_request_json(reqID):
 def accept_request(reqID):
     req = get_request(reqID)
     if req:
-        return req.set_status("accepted")
+        return req.set_status("Accepted")
     return False
 
 
 def reject_request(reqID):
     req = get_request(reqID)
     if req:
-        return req.set_status("rejected")
+        return req.set_status("Rejected")
     return False

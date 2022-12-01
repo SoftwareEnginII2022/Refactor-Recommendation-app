@@ -4,6 +4,7 @@ async function getUserData() {
 }
 
 function loadTable(users) {
+    console.log(users)
     const table = document.querySelector('#result');
     for (let user of users) {
         table.innerHTML += `<tr>
