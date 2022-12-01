@@ -1,5 +1,6 @@
 from App.database import db
 from datetime import date
+from sqlalchemy.sql import func
 import enum
 
 
