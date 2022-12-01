@@ -1,15 +1,16 @@
 from App.models import Notification
 from App.database import db
 from sqlalchemy.exc import IntegrityError
-from App.controllers import get_staff
+from App.controllers import get_user
+from datetime import datetime
 
 def create_notification(reqID,staffID,deadline):
-    newNotif = Notification(reqID=reqID,staffID=staffID, deadline=deadline)
+    newNotif = Notification(reqID=reqID,staffID=staffID, timestamp=deadline)
     return newNotif
 
 def send_notification(reqID, deadline, staffID):
     # get staff feed - notif list
-    staff = get_staff(staffID)
+    staff = get_user(staffID)
     # new notif
     newNotif = create_notification(staffID, reqID, deadline)
     try:
@@ -40,25 +41,47 @@ def get_all_notifs_json():
     notifs = [notif.toJSON() for notif in notifs]
     return notifs
 
+def populate_notification(notif):
+    notif.Student = get_user(notif.Request_Recommendation.studentID)
+    notif.isExpired = notif.Request_Recommendation.deadline < datetime.today()
+    return notif
+
 # gets a notification from a user's notif feed
-def get_user_notif(staffID, notifID):
-    return Notification.query.filter_by(sentToStaffID=staffID, notifID=notifID).first()
+def get_staff_notification(staffID):
+    notifs = Notification.query.filter_by(staffID=staffID).all()
 
-def change_status(notif, status):
-    if notif:
-        notif.status = status
+    for notif in notifs:
+        notif = populate_notification(notif)
+    
+    return notifs
+
+# gets a notification from a user's notif feed
+def get_notification(notifID):
+    notif = Notification.query.get(notifID)
+    notif = populate_notification(notif)
+
     return notif
 
-# approve notif
-def approve_notif(staffID, notifID, status):
-    notif = get_user_notif(staffID, notifID)
-    notif = change_status(notif, status)
-    if notif:
-        try:
-            db.session.add(notif)
-            db.session.commit()
-        except IntegrityError:
-            db.session.rollback()
-            return None
+def set_notification_seen(notificationID):
+    notif = get_notification(notificationID)
+    notif.seen = True
+    try:
+        db.session.add(notif)
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
     return notif
+
+# # approve notif
+# def approve_notif(staffID, notifID, status):
+#     notif = get_notification(notifID)
+#     notif = change_status(notif, status)
+#     if notif:
+#         try:
+#             db.session.add(notif)
+#             db.session.commit()
+#         except IntegrityError:
+#             db.session.rollback()
+#             return None
+#     return notif
     

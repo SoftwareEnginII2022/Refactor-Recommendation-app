@@ -15,7 +15,7 @@
 {% block content %}
 <h1>Flask MVC</h1>
 {% if current_user and current_user.is_authenticated %}
-<h3>Hi {{ current_user.email }}! You are a {{ current_user.getType() }}</h3>
+<h3>Hi {{ current_user.getName() }}! You are a {{ current_user.getType() }}</h3>
 {% endif %}
 <p>This is a boileplate flask application which follows the MVC pattern for structuring the project.</p>
 {% endblock %}
