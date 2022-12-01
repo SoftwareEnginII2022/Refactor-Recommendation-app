@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block title %}Requests{% endblock %}
+{% block page %}Requests{% endblock %}
+
+{% block link%}
+<ul id="nav-mobile" class="right">
+    <li><a href="/signup">Signup</a></li>
+</ul>
+{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+<main class="container">
+    <div id="card">
+        <form>
+            <input placeholder="staffID" id="staffID" type="text"/>
+            <input placeholder="requestBody" id="requestBody" type="text"/>
+            <input placeholder="deadline" id="deadline" type="date"/>
+            <input type="submit">
+        </form>
+    </div>
+    {% if r %}
+        <table>
+            <th>
+                <td>RequestID</thd>
+                <td>Message</td>
+                <td>ProfessorID</td>
+                <td>Date Requested</td>
+                <td>Deadline</td>
+            </th>
+        
+        {% for r in requests %}
+                <tr>
+                    <td>{{r.id}}</td>
+                    <td>{{r.requestBody}}</td>
+                    <td>{{r.staffID}}</td>
+                    <td>{{r.dateRequested}}</td>
+                    <td>{{r.status}}</td>
+
+                    {% if r.reccomendation %}
+                        <a href="#"><td> View Recommendation</td></a>
+                    {% endif %}
+                </tr>         
+        {% endfor %}
+    </table>
+    {% else %}
+        <p> You have no Recommendation Requests create one :-D</p>
+    {% endif %}
+</main>
+{% endblock %}
