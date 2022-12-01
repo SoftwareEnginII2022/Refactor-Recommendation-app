@@ -34,7 +34,7 @@
                 <br />
                 <div class="input-field">
                     <label for="text">Recommendation Comments</label>
-                    <input type="text" name="comments" placeholder="Enter comments for student recommendation"
+                    <textarea type="text" name="comments" placeholder="Enter comments for student recommendation"
                         class="materialize-textarea"></textarea>
                 </div>
 
@@ -56,7 +56,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for notif in notifs %}
+                {% for notif in notifs|reverse %}
                 {% set status = notif.Request_Recommendation.status.value.upper() %}
                 <tr {% if not notif.seen %} class="green accent-1" {% endif %}>
                     <td>{{ notif.Student.getName() }}</td>

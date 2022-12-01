@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}Recommendation{% endblock %}
+{% block page %}{{ recommendation.Staff.getName() }}'s Recommendation{% endblock %}
+
+{% block link%}
+<ul id="nav-mobile" class="left">
+    <li><a href="/app">Back</a></li>
+</ul>
+<ul id="nav-mobile" class="right">
+    <li><a href="/logout">Logout</a></li>
+</ul>
+{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+<main class="container">
+    <div class="row">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Comments</span>
+                <div>
+                    <div>
+                        <p style="white-space: pre-wrap;">{{ recommendation.comments }}</p>
+                    </div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <b>To: </b>{{ recommendation.Student.getName() }}
+                                </td>
+                                <td>
+                                    <b>From: </b>{{ recommendation.Staff.getName() }}
+                                </td>
+                                <td>
+                                    <b>Created: </b>{{ recommendation.dateSubmitted.strftime('%Y-%m-%d') }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+{% endblock %}

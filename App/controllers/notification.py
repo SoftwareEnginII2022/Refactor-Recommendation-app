@@ -62,9 +62,9 @@ def get_staff_notifications(staffID):
     return notifs
 
 # gets a notification from a user's notif feed
-def get_notification(notifID):
+def get_notification(notificationID):
     check_expired_requests()
-    notif = Notification.query.get(notifID)
+    notif = Notification.query.get(notificationID)
     notif = populate_notification(notif)
 
     return notif

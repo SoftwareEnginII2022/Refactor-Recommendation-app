@@ -21,8 +21,6 @@ def view_notif(notificationID):
         notif = get_notification(notificationID)
         notif = set_notification_seen(notif)
         session['notif_url'] = url_for('notification_views.view_notif', notificationID=notificationID)
-        print("Session url")
-        print(session['notif_url'])
         return render_template('notif/view.html', notif=notif)
     return redirect(url_for('index_views.homepage'))
 

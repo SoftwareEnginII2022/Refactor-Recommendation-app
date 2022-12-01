@@ -2,7 +2,9 @@ from App.models import Recommendation, Student, Status
 from App.database import db
 from sqlalchemy.exc import IntegrityError
 from App.controllers import (
-    get_request
+    get_request,
+    get_staff,
+    get_student
 )
 
 def create_recommendation(reqID, staffID, comments):
@@ -48,11 +50,10 @@ def get_all_recommendations_json():
     recs = [rec.toJSON() for rec in recs]
     return recs
 
-def get_recommendation(reqID, recID):
-    rec = Recommendation.query.filter_by(reqID=reqID, recID=recID).first()
-    if rec:
-        return rec.toJSON()
-    return None
+def get_recommendation(recID):
+    rec = Recommendation.query.get(recID)
+    rec.Staff = get_staff(rec.staffID)
+    rec_req = get_request(rec.reqID)
+    rec.Student = get_student(rec_req.studentID)
 
-
-
+    return rec

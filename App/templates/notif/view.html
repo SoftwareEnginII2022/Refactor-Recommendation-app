@@ -15,20 +15,6 @@
 
 {% block content %}
 <main class="container">
-
-    <!-- <div class="card">
-        <div class="card-content">
-            <span class="card-title">Create Todo</span>
-            <form name="addForm" method="POST" action="/todos">
-                <div class="input-field">
-                    <input type="text" name="text" placeholder="enter to-do" class="materialize-textarea"></textarea>
-                    <label for="text">Enter todo Text</label>
-                </div>
-                <input class="btn green white-text" type="submit" value="SAVE" />
-            </form>
-        </div>
-    </div> -->
-
     <div class="row">
         {% set status = notif.Request_Recommendation.status.value.upper() %}
         {% set cannotModify = (status != "PENDING") %}

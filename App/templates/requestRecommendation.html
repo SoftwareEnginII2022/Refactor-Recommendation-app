@@ -69,9 +69,11 @@
             <td>{{r.status.value}}</td>
 
             {% if r.Recommendation %}
-            <a href="#">
-                <td> View Recommendation</td>
-            </a>
+            <td>
+                <a href="/recommendation/{{ r.Recommendation.recID }}">
+                    View Recommendation
+                </a>
+            </td>
             {% else %}
             <td>Not available</td>
             {% endif %}
