@@ -1,27 +1,41 @@
 from App.database import db
 from datetime import date
 
+from enum import Enum
+class Status(Enum):
+    PENDING = "Pending"
+    ACCEPTED = "Accepted"
+    REJECTED = "Rejected"
+    COMPLETED = "Completed"
+
+
 class Request_Recommendation(db.Model):
     __tablename__ = "request_recommendation"
     reqID = db.Column(db.Integer, primary_key=True)
     staffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
     studentID = db.Column(db.Integer, db.ForeignKey('student.studentID'))
-    timestamp = db.Column(db.Date, nullable= False, default= date(1970,1,1))
+    dateRequested = db.Column(db.Date, nullable=False, default=date.today)
+    deadline = db.Column(db.Date, nullable= False, default= date(1970,1,1))
+    status = db.Column(db.Enum(Status), nullable = False)
     requestBody = db.Column(db.String, nullable=False)
+
     Recommendation = db.relationship('Recommendation', uselist=True, backref='request_recommendation', lazy=True, cascade="all, delete-orphan")
 
-    def __init__(self, staffID, studentID, timestamp, requestBody):
+    def __init__(self, staffID, studentID, deadline, requestBody):
         self.staffID = staffID
         self.studentID = studentID
-        self.timestamp = timestamp        
+        self.deadline = deadline        
         self.requestBody=requestBody
+        self.status = Status.PENDING
 
     def toJSON(self):
         return{
             'id': self.id,
             'staffID': self.staffID,
             'studentID': self.studentID,
-            'timestamp': self.timestamp,
+            'dateRequested':self.dateRequested,
+            'deadline': self.deadline,
+            'status': self.status.value,
             'requestBody': self.requestBody,
             'recommendation': self.Recommendation.toJSON() if self.Recommendation else None
         }

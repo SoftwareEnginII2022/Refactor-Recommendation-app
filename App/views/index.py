@@ -21,6 +21,10 @@ def login_page():
 def signup_page():
     return render_template('signup.html')
 
+@index_views.route('/request', methods=['GET'])
+def test_page():
+    return render_template('requestRecommendation.html')
+    
 @index_views.route('/app', methods=['GET'])
 @login_required
 def login_required():
