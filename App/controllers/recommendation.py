@@ -20,26 +20,6 @@ def create_recommendation(reqID, staffID, comments):
 
     return False
 
-def send_recommendation(reqID, staffID, comments):
-    student = Student.query.get(staffID)
-    newrec = create_recommendation(reqID, staffID, comments)
-    try:
-        db.session.add(newrec)
-        db.session.commit()
-    except IntegrityError:
-        db.session.rollback()
-        return None
-
-    # Should not need to append this, as the relationship will have it here already
-    # student.Recommendation.append(newrec)
-    # try:
-    #     db.session.add(student)
-    #     db.session.commit()
-    # except IntegrityError:
-    #     db.session.rollback()
-    #     return None
-    # return student
-
 def get_all_recommendations():
     return Recommendation.query.all()
 
