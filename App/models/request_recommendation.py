@@ -51,38 +51,22 @@ class Request_Recommendation(db.Model):
         db.session.add(notif)
         db.session.commit()
     
-    def set_status(self, status):
-        isExpired = self.deadline < datetime.today()
-        cannotModify = isExpired or (self.status !=  Status.PENDING)
-
-        if cannotModify:
-            return False
-
-        values = [item.value for item in Status]
-        if status in values:
-            self.status = Status(status)
-            db.session.add(self)
-            db.session.commit()
-            
-        return True
+    def set_status(self, status):        
+        if self.status == Status.PENDING:
+            values = [item.value for item in Status]
+            if status in values:
+                self.status = Status(status)
+                db.session.add(self)
+                db.session.commit()
     
     def reject_expired_request(self):
-        isExpired = self.deadline < datetime.today()
-
-        if isExpired and (self.status ==  Status.PENDING):
-            self.status = Status.REJECTED
+        if (self.deadline < datetime.today()) and (self.status ==  Status.PENDING or self.status ==  Status.ACCEPTED):
+            self.status = Status.EXPIRED
             db.session.add(self)
             db.session.commit()
     
     def complete_request(self):
-        isExpired = self.deadline < datetime.today()
-        canModify = not isExpired and (self.status ==  Status.ACCEPTED)
-
-        if not canModify:
-            return False
-        
-        self.status = Status.COMPLETED
-        db.session.add(self)
-        db.session.commit()
-            
-        return True
+        if self.status == Status.ACCEPTED:
+            self.status = Status.COMPLETED
+            db.session.add(self)
+            db.session.commit()

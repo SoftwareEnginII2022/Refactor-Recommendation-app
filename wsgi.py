@@ -72,12 +72,14 @@ def mockup_reccommendation_request():
     student1 = create_user("student1@email.com", "student1", "student", "Stu", "Dent1")
     student2 = create_user("student2@email.com", "student2", "student", "Stu", "Dent2")
     student3 = create_user("student3@email.com", "student2", "student", "Stu", "Dent3")
+    student4 = create_user("student4@email.com", "student4", "student", "Stu", "Dent4")
     staff = create_user("staff@email.com", "staff", "staff", "St", "Aff")
     
     try:
         db.session.add(student1)
         db.session.add(student2)
         db.session.add(student3)
+        db.session.add(student4)
         db.session.add(staff)
         db.session.commit()
     except IntegrityError as e:
@@ -87,14 +89,17 @@ def mockup_reccommendation_request():
     rec_req1 = create_request(staff.staffID, student1.studentID, datetime.now() + timedelta(days=7), "Hi, I am a student 1. Please send me a recommendation 1!")
     rec_req2 = create_request(staff.staffID, student2.studentID, datetime.now() - timedelta(days=7), "Hi, I am a student 2. Please send me a recommendation 2!")
     rec_req3 = create_request(staff.staffID, student3.studentID, datetime.now() + timedelta(days=2), "Hi, I am a student 3. Please send me a recommendation 3!")
+    rec_req4 = create_request(staff.staffID, student4.studentID, datetime.now() + timedelta(days=2), "Hi, I am a student 4. Please send me a recommendation 4!")
     db.session.add(rec_req1)
     db.session.add(rec_req2)
     db.session.add(rec_req3)
+    db.session.add(rec_req4)
     db.session.commit()
 
     rec_req1.notify()
     rec_req2.notify()
     rec_req3.notify()
+    rec_req4.notify()
 
 '''
 Test Commands

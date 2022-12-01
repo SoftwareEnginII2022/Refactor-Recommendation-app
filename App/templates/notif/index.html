@@ -38,23 +38,20 @@
             </thead>
             <tbody>
                 {% for notif in notifs %}
+                {% set status = notif.Request_Recommendation.status.value.upper() %}
                 <tr {% if not notif.seen %} class="green accent-1" {% endif %}>
                     <td>{{ notif.Student.getName() }}</td>
                     <td>
                         {{ notif.Request_Recommendation.deadline.strftime('%Y-%m-%d') }}
-                        {% if notif.isExpired %}
-                        (expired)
-                        {% endif %}
                     </td>
                     <td>
                         <a class="waves-effect waves-light btn green"
                             href="/notification/{{notif.notificationID}}">View</a>
                     </td>
-                    {% set status = notif.Request_Recommendation.status.value.upper() %}
                     <td>
                         <span {% if status=="ACCEPTED" %} class="chip green-text" {% elif status=="REJECTED" %}
-                            class="chip red-text" {% elif status=="COMPLETED" %} class="chip blue-text" {% else %}
-                            class="chip" {% endif %}>
+                            class="chip red-text" {% elif status=="COMPLETED" %} class="chip blue-text" {% elif
+                            status=="EXPIRED" %} class="chip grey-text" {% else %} class="chip" {% endif %}>
                             {{ status }}
                         </span>
                     </td>

@@ -43,7 +43,6 @@ def get_all_notifs_json():
 
 def populate_notification(notif):
     notif.Student = get_user(notif.Request_Recommendation.studentID)
-    notif.isExpired = (notif.Request_Recommendation.deadline < datetime.today()) and notif.Request_Recommendation.status.value == "Pending"
     return notif
 
 def check_expired_requests():
