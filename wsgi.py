@@ -3,7 +3,8 @@ from flask import Flask
 from flask.cli import with_appcontext, AppGroup
 
 from datetime import datetime, timedelta
-from App.database import create_db, get_migrate
+from App.database import db, create_db, get_migrate
+from sqlalchemy.exc import IntegrityError
 from App.main import create_app
 from App.controllers import (
     create_request,
@@ -70,8 +71,36 @@ def initialize():
 def mockup_reccommendation_request():
     student = create_user("student@email.com", "student", "student", "Stu", "Dent")
     staff = create_user("staff@email.com", "staff", "staff", "St", "Aff")
+    
+    try:
+        db.session.add(student)
+        db.session.add(staff)
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
 
-    rec_req = create_request(staff.staffID, student.studentID, datetime.now() + datetime.timedelta(days=7), "Hi, I am a student. Please send me a recommendation!")
+    rec_req = create_request(staff.staffID, student.studentID, datetime.now() + timedelta(days=7), "Hi, I am a student. Please send me a recommendation!")
+    db.session.add(rec_req)
+    db.session.commit()
+
+    rec_req.notify()
+
+@app.cli.command("mockup_expired_rec_req")
+def mockup_expired_reccommendation_request():
+    student = create_user("student2@email.com", "student2", "student", "Stu", "Dent2")
+    
+    try:
+        db.session.add(student)    
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+    
+
+    rec_req = create_request(2, student.studentID, datetime.now() - timedelta(days=7), "Hi, I am a student 2. Please send me a recommendation 2!")
+    db.session.add(rec_req)
+    db.session.commit()
+
+    rec_req.notify()
 
 '''
 Test Commands

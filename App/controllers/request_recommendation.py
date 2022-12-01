@@ -56,11 +56,24 @@ def get_all_student_requests_json(id):
     recs = [rec.toJSON() for rec in recs]
     return recs
 
-def get_request(reqID, recID):
-    rec = Request_Recommendation.query.filter_by(reqID=reqID, recID=recID).first()
+def get_request(reqID):
+    return Request_Recommendation.query.get(reqID)
+
+def get_request_json(reqID):
+    rec = get_request(reqID)
     if rec:
         return rec.toJSON()
     return None
 
+def accept_request(reqID):
+    req = get_request(reqID)
+    if req:
+        return req.set_status("accepted")
+    return False
 
 
+def reject_request(reqID):
+    req = get_request(reqID)
+    if req:
+        return req.set_status("rejected")
+    return False

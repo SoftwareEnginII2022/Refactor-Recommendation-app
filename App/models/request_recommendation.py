@@ -2,6 +2,9 @@ from App.database import db
 from datetime import date
 from App.models import Notification
 from sqlalchemy.sql import func
+from datetime import datetime
+import json
+import enum
 
 from enum import Enum
 class Status(Enum):
@@ -31,22 +34,48 @@ class Request_Recommendation(db.Model):
         self.requestBody=requestBody
         self.status=Status.PENDING
 
-        self.notify()
-
     def toJSON(self):
         return{
-            'id': self.reqID,
+            'reqID': self.reqID,
             'staffID': self.staffID,
             'studentID': self.studentID,
             'dateRequested':self.dateRequested,
             'deadline': self.deadline,
             'status': self.status.value,
             'requestBody': self.requestBody,
-            'status': self.status,
+            'status': self.status.value,
             'recommendation': self.Recommendation.toJSON() if self.Recommendation else None
         }
     
     def notify(self):
         notif = Notification(self.reqID, self.staffID)
-        pass
+        db.session.add(notif)
+        db.session.commit()
     
+    def set_status(self, status):
+        isExpired = self.deadline < datetime.today()
+        cannotModify = isExpired or (self.status !=  Status.PENDING)
+
+        if cannotModify:
+            return False
+
+        values = [item.value for item in Status]
+        if status in values:
+            self.status = Status(status)
+            db.session.add(self)
+            db.session.commit()
+            
+        return True
+    
+    def complete_request(self):
+        isExpired = self.deadline < datetime.today()
+        canModify = not isExpired and (self.status ==  Status.ACCEPTED)
+
+        if not canModify:
+            return False
+        
+        self.status = Status.COMPLETED
+        db.session.add(self)
+        db.session.commit()
+            
+        return True

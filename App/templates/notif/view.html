@@ -27,28 +27,38 @@
     </div> -->
 
     <div class="row">
+        {% set status = notif.Request_Recommendation.status.value.upper() %}
+        {% set cannotModify = (notif.isExpired) or (status != "PENDING") %}
         <table>
             <tbody>
                 <tr>
-                    <td>{{ notification.Student.getName() }}</td>
-                    <td>{{ notification.Request_Recommendation.status.upper() }}</td>
+                    <td>{{ notif.Student.getName() }}</td>
+                    <td>
+                        <span {% if status=="ACCEPTED" %} class="chip green-text" {% elif status=="REJECTED" %}
+                            class="chip red-text" {% elif status=="COMPLETED" %} class="chip blue-text" {% else %}
+                            class="chip" {% endif %}>
+                            {{ status }}
+                        </span>
+                    </td>
                     <td>
                         {{ notif.Request_Recommendation.deadline.strftime('%Y-%m-%d') }}
-                        {% if notification.isExpired %}
+                        {% if notif.isExpired %}
                         Expired
                         {% endif %}
                     </td>
                 </tr>
             </tbody>
         </table>
-        <p>{{ notification.Request_Recommendation.requestBody }}</p>
+        <p>{{ notif.Request_Recommendation.requestBody }}</p>
         <table>
             <tbody>
                 <tr>
-                    <td><a class="waves-effect waves-light btn green"
-                            href="/notification/{{notif.notificationID}}/accept">Accept</a></td>
-                    <td><a class="waves-effect waves-light btn green"
-                            href="/notification/{{notif.notificationID}}/reject">Reject</a></td>
+                    <td><a class="waves-effect waves-light btn green" href="/request/{{notif.reqID}}/accept" {% if
+                            cannotModify %} disabled {% endif %}>Accept</a>
+                    </td>
+                    <td><a class="waves-effect waves-light btn green" href="/request/{{notif.reqID}}/reject" {% if
+                            cannotModify %} disabled {% endif %}>Reject</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
