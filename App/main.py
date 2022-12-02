@@ -11,7 +11,6 @@ from datetime import timedelta
 from App.database import create_db
 
 from App.controllers import (
-    setup_jwt,
     get_user,
 )
 
@@ -57,7 +56,7 @@ def add_views(app, views):
 
 def invalid_route(e):
     flash("Page not found. Redirected to homepage")
-    url = url_for('index_views.homepage')
+    url = url_for('index_views.home_page')
     return redirect(url), 404, {"Refresh": "1; url="+ url}
 
 
@@ -91,7 +90,6 @@ def create_app(config={}):
     configure_uploads(app, photos)
     add_views(app, views)
     create_db(app)
-    # setup_jwt(app)
     login_manager.init_app(app)
     app.register_error_handler(404, invalid_route)
     app.app_context().push()

@@ -19,27 +19,31 @@
             <form method="POST" action="/recommendation">
                 <div classs="input-field">
                     <label for="student">Students with accepted requests</label>
+                    {% if accepted_req_students %}
                     <select placeholder="reqID" name="reqDetails" id="student" style="display:inline">
-                        {% if accepted_req_students %}
                         {% for req in accepted_req_students %}
                         <option value="-1" selected disabled hidden>Select a student</option>
                         <option value="{{ req.reqID }},{{ req.Student.getName() }}">{{ req.Student.getName() }}
                         </option>
                         {% endfor %}
-                        {% else %}
-                        <option value="-1"> No student requests available or accepted</option>
-                        {% endif %}
                     </select>
+                    {% else %}
+                    <select placeholder="reqID" name="reqDetails" id="student" style="display:inline"
+                        onmousedown="(function(e){ e.preventDefault(); })(event, this)">
+                        <option value="-1"> No student requests available or accepted</option>
+                    </select>
+                    {% endif %}
                 </div>
                 <br />
                 <div class="input-field">
                     <label for="text">Recommendation Comments</label>
                     <textarea type="text" name="comments" placeholder="Enter comments for student recommendation"
-                        class="materialize-textarea"></textarea>
+                        class="materialize-textarea" {% if not accepted_req_students %} disabled {% endif %}></textarea>
                 </div>
 
                 <div classs="card-action">
-                    <input class="btn green white-text" type="submit" value="SUBMIT" />
+                    <input class="btn green white-text" type="submit" value="Create" {% if not accepted_req_students %}
+                        disabled {% endif %} />
                 </div>
             </form>
         </div>
@@ -65,7 +69,7 @@
                     </td>
                     <td>
                         <a class="waves-effect waves-light btn green"
-                            href="/notification/{{notif.notificationID}}">View</a>
+                            href="/recommendation_request/{{notif.reqID}}">View</a>
                     </td>
                     <td>
                         <span {% if status=="ACCEPTED" %} class="chip green-text" {% elif status=="REJECTED" %}

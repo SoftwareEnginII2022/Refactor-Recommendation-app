@@ -5,10 +5,7 @@ from sqlalchemy.exc import IntegrityError
 
 from App.controllers import (
     create_user,
-    get_all_users,
     get_all_users_json,
-    get_user,
-    get_all_requests_json,
     get_user_by_email,
 )
 
@@ -19,22 +16,41 @@ user_views = Blueprint('user_views', __name__, template_folder='../templates')
 @user_views.route('/signup', methods=['POST'])
 def signup_action():
     data = request.form  # get data from form submission
-    if (data['userType'] == "student") or (data['userType'] == "staff"):
-        newuser = create_user(data['email'],
-            data['password'],
-            data['userType'],
-            data['firstName'],
-            data['lastName'])  # create user object
-    else:
-        flash("Invalid account type: " + data['userType'])
+    userType = data.get('userType', "User")
+    if (userType != "student") and (userType != "staff"):
+        flash("Invalid account type: " + userType)
         return redirect(url_for('index_views.signup_page'))
+
+    email = data.get('email')
+    password = data.get('password')
+    password2 = data.get('password2')
+    firstName = data.get('firstName')
+    lastName = data.get('lastName')
+
+    invalid_messages = []
+    if not firstName or  (type(firstName) == str and not firstName.strip()):
+        invalid_messages.append("First name cannot be blank.")
+    if not lastName or  (type(lastName) == str and not lastName.strip()):
+        invalid_messages.append("Last name cannot be blank.")
+    if not email or  (type(email) == str and not email.strip()):
+        invalid_messages.append("Please enter a valid email address.")
+    if not password or  (type(password) == str and not password.strip()):
+        invalid_messages.append("Please enter an appropriate password.")
+    if password != password2:
+        invalid_messages.append("Passowrds must match.")
+    
+    if invalid_messages:
+        flash(" ".join(invalid_messages))
+        return redirect(url_for('index_views.signup_page'))
+
+    newuser = create_user(email, password, userType, firstName, lastName)  # create user object
     
     try:
         db.session.add(newuser)
         db.session.commit()  # save user
         login_user(newuser)  # login the user
-        flash(data['userType'].capitalize() + 'Account Created!')  # send message
-        return redirect(url_for('index_views.homepage'))  # redirect to homepage
+        flash(userType.capitalize() + 'Account Created! ' + newuser.getName() + " has been logged in successfully.")  # send message
+        return redirect(url_for('index_views.home_page'))  # redirect to homepage
     except IntegrityError:  # attempted to insert a duplicate user
         db.session.rollback()
         flash("Email already exists")  # error message
@@ -44,11 +60,24 @@ def signup_action():
 @user_views.route('/login', methods=['POST'])
 def login_action():
     data = request.form
-    user = get_user_by_email(data['email'])
-    if user and user.check_password(data['password']):  # check credentials
-        flash('Logged in successfully.')  # send message to next page
+    email = data.get('email')
+    password = data.get('password')
+
+    invalid_messages = []
+    if not email or  (type(email) == str and not email.strip()):
+        invalid_messages.append("Please enter a valid email address.")
+    if not password or  (type(password) == str and not password.strip()):
+        invalid_messages.append("Please enter an appropriate password.")
+
+    if invalid_messages:
+        flash(" ".join(invalid_messages))
+        return redirect(url_for('index_views.login_page'))
+
+    user = get_user_by_email(email)
+    if user and user.check_password(password):  # check credentials
+        flash(user.getName() + ' has been logged in successfully.')  # send message to next page
         login_user(user)  # login the user
-        return redirect(url_for('index_views.homepage'))  # redirect to main page if login successful
+        return redirect(url_for('index_views.home_page'))  # redirect to main page if login successful
     else:
         flash('Invalid email or password')  # send message to next page
     return redirect(url_for('index_views.login_page'))
@@ -59,42 +88,3 @@ def logout():
     logout_user()
     flash('Logged Out!')
     return redirect(url_for('index_views.login_page')) 
-
-
-# Routes for testing purposes
-# check identity of current user
-@user_views.route('/identify', methods=['GET'])
-@login_required
-def identify_user_action():
-    return jsonify({'message': f"id : {current_user.id}, email: {current_user.email}, userType: {current_user.userType}"})
-
-# View all Users
-@user_views.route('/view/users', methods=['GET'])
-def get_user_page():
-    users = get_all_users()
-    return render_template('users.html', users=users)
-
-# JSON View all Users
-@user_views.route('/users')
-def client_app():
-    users = get_all_users_json()
-    print(users)
-    return jsonify(users)
-
-# STATIC View all Users
-@user_views.route('/static/users', methods=['GET'])
-def static_user_page():
-  return send_from_directory('static/user', 'index.html')
-
-
-# JSON View all Users
-@user_views.route('/requests')
-def client_app_requests():
-    requests = get_all_requests_json()
-    print(requests)
-    return jsonify(requests)
-
-# STATIC View all Requests
-@user_views.route('/static/requests', methods=['GET'])
-def static_user_page_requests():
-  return send_from_directory('static/request', 'index.html')

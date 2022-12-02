@@ -20,16 +20,6 @@ def create_recommendation(reqID, staffID, comments):
 
     return False
 
-def get_all_recommendations():
-    return Recommendation.query.all()
-
-def get_all_recommendations_json():
-    recs = get_all_recommendations()
-    if not recs:
-        return None
-    recs = [rec.toJSON() for rec in recs]
-    return recs
-
 def get_recommendation(recID):
     rec = Recommendation.query.get(recID)
     rec.Staff = get_staff(rec.staffID)

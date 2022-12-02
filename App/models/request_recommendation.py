@@ -2,8 +2,6 @@ from App.database import db
 from App.models import Notification
 from sqlalchemy.sql import func
 from datetime import datetime
-import json
-import enum
 
 from enum import Enum
 class Status(Enum):

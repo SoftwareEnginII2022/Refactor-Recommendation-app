@@ -1,7 +1,6 @@
 from App.database import db
 from datetime import datetime
 from sqlalchemy.sql import func
-import enum
 
 
 class Notification(db.Model):

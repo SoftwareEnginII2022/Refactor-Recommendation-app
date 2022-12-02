@@ -39,11 +39,13 @@
         <table>
             <tbody>
                 <tr>
-                    <td><a class="waves-effect waves-light btn green" href="/request/{{notif.reqID}}/accept" {% if
-                            cannotModify %} disabled {% endif %}>Accept</a>
+                    <td><a class="waves-effect waves-light btn green"
+                            href="/recommendation_request/{{notif.reqID}}/accept" {% if cannotModify %} disabled {%
+                            endif %}>Accept</a>
                     </td>
-                    <td><a class="waves-effect waves-light btn green" href="/request/{{notif.reqID}}/reject" {% if
-                            cannotModify %} disabled {% endif %}>Reject</a>
+                    <td><a class="waves-effect waves-light btn green"
+                            href="/recommendation_request/{{notif.reqID}}/reject" {% if cannotModify %} disabled {%
+                            endif %}>Reject</a>
                     </td>
                 </tr>
             </tbody>
@@ -69,7 +71,7 @@
                 </div>
 
                 <div classs="card-action">
-                    <input class="btn green white-text" type="submit" value="SUBMIT" />
+                    <input class="btn green white-text" type="submit" value="Create" />
                 </div>
             </form>
         </div>

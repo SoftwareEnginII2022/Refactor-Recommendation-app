@@ -4,7 +4,7 @@
 
 {% block link%}
 <ul id="nav-mobile" class="right">
-    <li><a href="/signup">Signup</a></li>
+    <li><a href="/logout">Logout</a></li>
 </ul>
 {% endblock %}
 
@@ -19,28 +19,34 @@
                 <div class="row">
                     <div classs="input-field">
                         <label for="staffID">Staff</label>
+                        {% if teachers %}
                         <select placeholder="staffID" name="staffID" id="staffID" style="display:inline">
-                            {% if teachers %}
                             {% for teacher in teachers %}
                             <option value="none" selected disabled hidden>Select a lecturer</option>
                             <option value="{{teacher.staffID}}">{{teacher.firstName}} {{teacher.lastName}} </option>
                             {% endfor %}
-                            {% else %}
-                            <option> No staff available</option>
-                            {% endif %}
                         </select>
+                        {% else %}
+                        <select placeholder="staffID" name="staffID" id="staffID" style="display:inline"
+                            onmousedown="(function(e){ e.preventDefault(); })(event, this)">
+                            <option> No lecturers available</option>
+                        </select>
+                        {% endif %}
                     </div>
                     <div classs="input-field">
-                        <label for="requestBody">Request Body</label>
-                        <input placeholder="Enter a message here" name="requestBody" id="requestBody" type="text" />
+                        <label for="requestBody">Description</label>
+                        <textarea placeholder="Enter a message here" name="requestBody" id="requestBody" type="text"
+                            class="materialize-textarea" {% if not teachers %} disabled {% endif %}></textarea>
                     </div>
                     <div classs="input-field">
                         <label for="deadline">Deadline</label>
-                        <input placeholder="01-01-1970" name="deadline" id="deadline" type="date" value="{{today}}" />
+                        <input placeholder="01-01-1970" name="deadline" id="deadline" type="date" value="{{today}}" {%
+                            if not teachers %} disabled {% endif %} />
                     </div>
 
                     <div classs="card-action">
-                        <input type="submit" class="green text-white btn">
+                        <input type="submit" class="green text-white btn" value="Request" {% if not teachers %} disabled
+                            {% endif %}>
                     </div>
 
                 </div>
