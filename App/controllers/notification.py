@@ -1,4 +1,4 @@
-from App.models import Notification
+from App.models import Notification, Request_Recommendation
 from App.database import db
 from sqlalchemy.exc import IntegrityError
 from App.controllers import get_user
@@ -43,11 +43,17 @@ def get_all_notifs_json():
 
 def populate_notification(notif):
     notif.Student = get_user(notif.Request_Recommendation.studentID)
-    notif.isExpired = notif.Request_Recommendation.deadline < datetime.today()
     return notif
 
+def check_expired_requests():
+    req_recs = Request_Recommendation.query.filter(Request_Recommendation.deadline < datetime.today()).all()
+
+    for req_rec in req_recs:
+        req_rec.reject_expired_request()
+
 # gets a notification from a user's notif feed
-def get_staff_notification(staffID):
+def get_staff_notifications(staffID):
+    check_expired_requests()
     notifs = Notification.query.filter_by(staffID=staffID).all()
 
     for notif in notifs:
@@ -56,8 +62,9 @@ def get_staff_notification(staffID):
     return notifs
 
 # gets a notification from a user's notif feed
-def get_notification(notifID):
-    notif = Notification.query.get(notifID)
+def get_notification(notificationID):
+    check_expired_requests()
+    notif = Notification.query.get(notificationID)
     notif = populate_notification(notif)
 
     return notif

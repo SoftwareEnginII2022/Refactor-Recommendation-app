@@ -1,5 +1,4 @@
 from App.database import db
-from datetime import date
 from App.models import Notification
 from sqlalchemy.sql import func
 from datetime import datetime
@@ -19,18 +18,18 @@ class Request_Recommendation(db.Model):
     reqID = db.Column(db.Integer, primary_key=True)
     staffID = db.Column(db.Integer, db.ForeignKey('staff.staffID'))
     studentID = db.Column(db.Integer, db.ForeignKey('student.studentID'))
-    dateRequested = db.Column(db.Date, nullable=False, default=date.today)
-    deadline = db.Column(db.Date, nullable= False, default= date(1970,1,1))
-    status = db.Column(db.Enum(Status), nullable = False)
+    dateRequested = db.Column(db.Date, nullable=False, default=func.now())
+    deadline = db.Column(db.DateTime(timezone=True), nullable= False, default= func.now())
+    status = db.Column(db.Enum(Status), nullable = False, default = Status.PENDING)
     requestBody = db.Column(db.String, nullable=False)
 
-    Recommendation = db.relationship('Recommendation', uselist=True, backref='request_recommendation', lazy=True, cascade="all, delete-orphan")
+    Recommendation = db.relationship('Recommendation', uselist=False, backref='request_recommendation', lazy=True, cascade="all, delete-orphan")
 
     def __init__(self, staffID, studentID, deadline, requestBody):
         self.staffID = staffID
         self.studentID = studentID
         self.deadline = deadline
-        self.dateRequested = date.today()       
+        self.dateRequested = datetime.today()
         self.requestBody=requestBody
         self.status=Status.PENDING
 
@@ -52,30 +51,22 @@ class Request_Recommendation(db.Model):
         db.session.add(notif)
         db.session.commit()
     
-    def set_status(self, status):
-        isExpired = self.deadline < datetime.today()
-        cannotModify = isExpired or (self.status !=  Status.PENDING)
-
-        if cannotModify:
-            return False
-
-        values = [item.value for item in Status]
-        if status in values:
-            self.status = Status(status)
+    def set_status(self, status):        
+        if self.status == Status.PENDING:
+            values = [item.value for item in Status]
+            if status in values:
+                self.status = Status(status)
+                db.session.add(self)
+                db.session.commit()
+    
+    def reject_expired_request(self):
+        if (self.deadline < datetime.today()) and (self.status ==  Status.PENDING or self.status ==  Status.ACCEPTED):
+            self.status = Status.EXPIRED
             db.session.add(self)
             db.session.commit()
-            
-        return True
     
     def complete_request(self):
-        isExpired = self.deadline < datetime.today()
-        canModify = not isExpired and (self.status ==  Status.ACCEPTED)
-
-        if not canModify:
-            return False
-        
-        self.status = Status.COMPLETED
-        db.session.add(self)
-        db.session.commit()
-            
-        return True
+        if self.status == Status.ACCEPTED:
+            self.status = Status.COMPLETED
+            db.session.add(self)
+            db.session.commit()

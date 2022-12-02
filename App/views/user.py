@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
-from flask_jwt import jwt_required, current_identity
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from App.database import db
 from sqlalchemy.exc import IntegrityError
 
@@ -65,9 +64,9 @@ def logout():
 # Routes for testing purposes
 # check identity of current user
 @user_views.route('/identify', methods=['GET'])
-@jwt_required()
+@login_required
 def identify_user_action():
-    return jsonify({'message': f"id : {current_identity.id}, email: {current_identity.email}, userType: {current_identity.userType}"})
+    return jsonify({'message': f"id : {current_user.id}, email: {current_user.email}, userType: {current_user.userType}"})
 
 # View all Users
 @user_views.route('/view/users', methods=['GET'])
@@ -79,6 +78,7 @@ def get_user_page():
 @user_views.route('/users')
 def client_app():
     users = get_all_users_json()
+    print(users)
     return jsonify(users)
 
 # STATIC View all Users

@@ -12,14 +12,6 @@ from App.controllers import (
 
 requestRec_views = Blueprint('requestRec_views', __name__, template_folder='../templates')
 
-@requestRec_views.route('/requestRec/api',methods=['POST'])
-@jwt_required()
-def new_request_api():
-    data = request.get_json()
-    request = create_request(data['staffID'], current_identity.id, data['deadline'],data['requestBody'] )
-    if not request:
-        return jsonify({"message":"error"}),500
-    return jsonify(request.toJSON()),200
 
 @requestRec_views.route('/requestRec', methods=['GET'])
 @login_required

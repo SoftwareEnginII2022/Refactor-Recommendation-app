@@ -3,6 +3,9 @@
 {% block page %}{{ notif.Student.getName() }}'s Recommendation Request{% endblock %}
 
 {% block link%}
+<ul id="nav-mobile" class="left">
+    <li><a href="/app">Back</a></li>
+</ul>
 <ul id="nav-mobile" class="right">
     <li><a href="/logout">Logout</a></li>
 </ul>
@@ -11,40 +14,23 @@
 {{ super() }}
 
 {% block content %}
+{% set status = notif.Request_Recommendation.status.value.upper() %}
 <main class="container">
-
-    <!-- <div class="card">
-        <div class="card-content">
-            <span class="card-title">Create Todo</span>
-            <form name="addForm" method="POST" action="/todos">
-                <div class="input-field">
-                    <input type="text" name="text" placeholder="enter to-do" class="materialize-textarea"></textarea>
-                    <label for="text">Enter todo Text</label>
-                </div>
-                <input class="btn blue white-text" type="submit" value="SAVE" />
-            </form>
-        </div>
-    </div> -->
-
     <div class="row">
-        {% set status = notif.Request_Recommendation.status.value.upper() %}
-        {% set cannotModify = (notif.isExpired) or (status != "PENDING") %}
+        {% set cannotModify = (status != "PENDING") %}
         <table>
             <tbody>
                 <tr>
                     <td>{{ notif.Student.getName() }}</td>
                     <td>
                         <span {% if status=="ACCEPTED" %} class="chip green-text" {% elif status=="REJECTED" %}
-                            class="chip red-text" {% elif status=="COMPLETED" %} class="chip blue-text" {% else %}
-                            class="chip" {% endif %}>
+                            class="chip red-text" {% elif status=="COMPLETED" %} class="chip blue-text" {% elif
+                            status=="EXPIRED" %} class="chip grey-text" {% else %} class="chip" {% endif %}>
                             {{ status }}
                         </span>
                     </td>
                     <td>
                         {{ notif.Request_Recommendation.deadline.strftime('%Y-%m-%d') }}
-                        {% if notif.isExpired %}
-                        Expired
-                        {% endif %}
                     </td>
                 </tr>
             </tbody>
@@ -63,6 +49,31 @@
             </tbody>
         </table>
     </div>
+    {% if status=="ACCEPTED" %}
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Create Recommendation</span>
+            <form method="POST" action="/recommendation">
+                <div classs="input-field">
+                    <label>Student</label>
+                    <input placeholder="First Name" id="student" type="text" value="{{ notif.Student.getName() }}"
+                        readonly>
+                    <input placeholder="First Name" id="student" name="reqDetails" type="text"
+                        value="{{ notif.reqID }},{{ notif.Student.getName() }}" readonly style="display: none;">
+                </div>
+                <br />
+                <div class="input-field">
+                    <label for="text">Recommendation Comments</label>
+                    <textarea type="text" name="comments" placeholder="Enter comments for student recommendation"
+                        class="materialize-textarea"></textarea>
+                </div>
 
+                <div classs="card-action">
+                    <input class="btn green white-text" type="submit" value="SUBMIT" />
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
 </main>
 {% endblock %}

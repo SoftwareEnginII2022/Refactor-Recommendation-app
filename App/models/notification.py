@@ -1,6 +1,7 @@
 from App.database import db
-from datetime import date
+from datetime import datetime
 from sqlalchemy.sql import func
+import enum
 
 
 class Notification(db.Model):
@@ -14,7 +15,7 @@ class Notification(db.Model):
     def __init__(self, reqID,staffID):
         self.reqID = reqID
         self.staffID=staffID
-        self.timestamp=date.today()
+        self.timestamp=datetime.today()
         self.seen=False
         
     def toJSON(self):
