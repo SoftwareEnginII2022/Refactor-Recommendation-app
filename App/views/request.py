@@ -1,11 +1,12 @@
 from datetime import datetime
-from flask import Blueprint, render_template, jsonify, request, send_from_directory
+from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash,redirect,url_for
 from flask_jwt import jwt_required, current_identity
 from flask_login import login_required, current_user
 
 from App.controllers import (
     create_request,
-    get_all_staff,
+    get_staff_names,
+    get_student,
     get_all_student_requests
 )
 
@@ -22,16 +23,22 @@ def new_request_api():
 
 @requestRec_views.route('/requestRec', methods=['GET'])
 @login_required
-def test_page():
-    requests = get_all_student_requests(current_user.id)
-    teachers = get_all_staff()
-    return render_template('requestRecommendation.html',requests = requests, teachers = teachers)
+def request_page():
+    if get_student(current_user.id):
+        requests = get_all_student_requests(current_user.id)
+        teachers = get_staff_names()
+        return render_template('requestRecommendation.html',requests = requests, teachers = teachers)
+    flash("Staff cannot perform this function")
+    return redirect(url_for('index_views.homepage'))
 
 @requestRec_views.route('/requestRec',methods=['POST'])
 @login_required
 def new_request():
-    data = request.form
-    new_request = create_request(data['staffID'], current_user.id, datetime.strptime(data['deadline'],"%Y-%m-%d"),data['requestBody'])
-    if not new_request:
-        return test_page()
-    return test_page()
+    if get_student(current_user.id):
+        data = request.form
+        new_request = create_request(data['staffID'], current_user.id, datetime.strptime(data['deadline'],"%Y-%m-%d"),data['requestBody'])
+        if not new_request:
+            flash("Error you already have a pending request to this Lecturer")
+        return redirect(url_for('requestRec_views.request_page'))
+    flash("Staff cannot perform this function")
+    return redirect(url_for('index_views.homepage'))

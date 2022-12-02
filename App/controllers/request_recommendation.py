@@ -1,16 +1,20 @@
-from App.models import Request_Recommendation, Student
+from App.models import Request_Recommendation, Student, Status
 from App.database import db
 from sqlalchemy.exc import IntegrityError
 
 def create_request(staffID, studentID, deadline, requestBody):
-    newreq = Request_Recommendation(staffID, studentID, deadline, requestBody)
-    try:
-            db.session.add(newreq)
-            db.session.commit()
-            return newreq
-    except IntegrityError:
-            db.session.rollback()
-            return None
+    query = Request_Recommendation.query.filter(Request_Recommendation.staffID == staffID,Request_Recommendation.studentID == studentID, db.or_(Request_Recommendation.status == Status.PENDING, Request_Recommendation.status == Status.ACCEPTED)).all()
+    if query == []:       
+        newreq = Request_Recommendation(staffID, studentID, deadline, requestBody)
+        try:
+                db.session.add(newreq)
+                db.session.commit()
+                newreq.notify()
+                return newreq
+        except IntegrityError:
+                db.session.rollback()
+                return None
+    return None
     
 
 def send_request(reqID, staffID, comments):

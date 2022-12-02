@@ -1,3 +1,4 @@
+import select
 from App.models import Staff
 from App.database import db
 from flask import jsonify
@@ -45,6 +46,13 @@ def get_staff_by_name(firstName, lastName):
     if staff == []:
         return None
     return jsonify(staff)
+    
+def get_staff_names():
+    staff = db.session.execute(db.select(Staff.staffID,Staff.firstName, Staff.lastName)).all()
+
+    if not staff:
+       return None
+    return staff
 
 def search_staff(type, keyword):
     if (type=="ID"):
