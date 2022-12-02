@@ -22,6 +22,10 @@ def create_recommendation(reqID, staffID, comments):
 
 def get_recommendation(recID):
     rec = Recommendation.query.get(recID)
+
+    if not rec:
+        return None
+        
     rec.Staff = get_staff(rec.staffID)
     rec_req = get_request(rec.reqID)
     rec.Student = get_student(rec_req.studentID)

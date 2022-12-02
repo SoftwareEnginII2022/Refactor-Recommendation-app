@@ -20,6 +20,10 @@ def get_recommendation_action(recID):
 
     recommendation = get_recommendation(recID)
 
+    if not recommendation:
+        flash("No recommendation found")
+        return redirect(url_for("index_views.home_page"))
+
     return render_template('recommendation/view.html', recommendation=recommendation)
 
 # Route for creating a recommendation with a valid request

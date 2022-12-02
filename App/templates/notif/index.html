@@ -50,13 +50,14 @@
     </div>
 
     <div class="row">
+        {% if notifs %}
         <table>
             <thead>
                 <tr>
-                    <td>Name</td>
-                    <td>Deadline</td>
-                    <td>Actions</td>
-                    <td>Status</td>
+                    <th>Name</th>
+                    <th>Deadline</th>
+                    <th>Actions</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -82,6 +83,9 @@
                 {% endfor %}
             <tbody>
         </table>
+        {% else %}
+        <p> You have no notifications. Check back later!</p>
+        {% endif %}
     </div>
 
 </main>

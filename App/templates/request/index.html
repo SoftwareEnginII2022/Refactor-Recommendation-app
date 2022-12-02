@@ -54,40 +54,50 @@
             </form>
         </div>
     </div>
-    {% if requests %}
-    <table>
-        <tr>
-            <th>RequestID</th>
-            <th>Message</th>
-            <th>ProfessorID</th>
-            <th>Date Requested</th>
-            <th>Deadline</th>
-            <th>Status</th>
-            <th>Recommendation</th>
-        </tr>
-        {% for r in requests %}
-        <tr>
-            <td>{{r.reqID}}</td>
-            <td>{{r.requestBody}}</td>
-            <td>{{r.staffID}}</td>
-            <td>{{r.dateRequested}}</td>
-            <td>{{r.deadline}}</td>
-            <td>{{r.status.value}}</td>
+    <div class="row">
+        {% if requests %}
+        <table>
+            <thead>
+                <tr>
+                    <th>To</th>
+                    <!-- <th>Message</th> -->
+                    <th>Date Requested</th>
+                    <th>Deadline</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requests|reverse %}
+                {% set status = req.status.value.upper() %}
+                <tr style="border: 0">
+                    <td style="white-space: nowrap;">{{req.Staff.getName()}}</td>
+                    <td>{{ req.dateRequested.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ req.deadline.strftime('%Y-%m-%d') }}</td>
+                    <td><span {% if status=="ACCEPTED" %} class="chip green-text" {% elif status=="REJECTED" %}
+                            class="chip red-text" {% elif status=="COMPLETED" %} class="chip blue-text" {% elif
+                            status=="EXPIRED" %} class="chip grey-text" {% else %} class="chip" {% endif %}>
+                            {{ status }}
+                        </span></td>
 
-            {% if r.Recommendation %}
-            <td>
-                <a href="/recommendation/{{ r.Recommendation.recID }}">
-                    View Recommendation
-                </a>
-            </td>
-            {% else %}
-            <td>Not available</td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </table>
-    {% else %}
-    <p> You have no Recommendation Requests create one :-D</p>
-    {% endif %}
+                    {% if req.Recommendation %}
+                    <td>
+                        <a class="waves-effect waves-light btn green"
+                            href="/recommendation/{{ req.Recommendation.recID }}">View</a>
+                    </td>
+                    {% else %}
+                    <td><a class="waves-effect waves-light btn green" href="#" disabled>View</a></td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td colspan="5"><b>Message:</b> <span style="white-space: pre-wrap;">{{req.requestBody}}</span></td>
+                </tr>
+                {% endfor %}
+            <tbody>
+        </table>
+        {% else %}
+        <p> You have no Recommendation Requests create one :-D</p>
+        {% endif %}
+    </div>
 </main>
 {% endblock %}

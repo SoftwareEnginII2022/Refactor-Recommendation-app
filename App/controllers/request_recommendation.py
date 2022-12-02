@@ -1,6 +1,6 @@
 from App.models import Request_Recommendation, Student, Status
 from App.database import db
-from App.controllers import get_user
+from App.controllers import get_user, get_staff
 from sqlalchemy.exc import IntegrityError
 
 def create_request(staffID, studentID, deadline, requestBody):
@@ -18,10 +18,14 @@ def create_request(staffID, studentID, deadline, requestBody):
     return None
 
 def get_student_requests(id):
-    request = Request_Recommendation.query.filter_by(studentID = id)
-    if not request:
+    requests = Request_Recommendation.query.filter_by(studentID = id).all()
+    if not requests:
         return None
-    return request
+
+    for req in requests:
+        req.Staff = get_staff(req.staffID)
+
+    return requests
 
 def get_request(reqID):
     return Request_Recommendation.query.get(reqID)
