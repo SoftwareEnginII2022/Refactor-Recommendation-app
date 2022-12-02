@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, flash, redirect, url_for
 from flask_login import LoginManager, current_user
 from flask_uploads import DOCUMENTS, IMAGES, TEXT, UploadSet, configure_uploads
 from flask_cors import CORS
@@ -22,7 +22,7 @@ from App.views import (
     staff_views,
     notification_views,
     recommendation_views,
-    requestRec_views,
+    request_reccommendation_views,
 )
 
 # New views must be imported and added to this list
@@ -34,7 +34,7 @@ views = [
     staff_views,
     notification_views,
     recommendation_views,
-    requestRec_views
+    request_reccommendation_views
 ]
 
 
@@ -53,6 +53,12 @@ def load_user(user_id):
 def add_views(app, views):
     for view in views:
         app.register_blueprint(view)
+
+
+def invalid_route(e):
+    flash("Page not found. Redirected to homepage")
+    url = url_for('index_views.homepage')
+    return redirect(url), 404, {"Refresh": "1; url="+ url}
 
 
 def loadConfig(app, config):
@@ -87,5 +93,6 @@ def create_app(config={}):
     create_db(app)
     # setup_jwt(app)
     login_manager.init_app(app)
+    app.register_error_handler(404, invalid_route)
     app.app_context().push()
     return app

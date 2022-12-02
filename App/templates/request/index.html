@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
-{% block title %}Requests{% endblock %}
-{% block page %}Requests{% endblock %}
+{% block title %}Recommendation Requests{% endblock %}
+{% block page %}{{ current_user.getName() }}'s Recommendation Requests{% endblock %}
 
 {% block link%}
 <ul id="nav-mobile" class="right">
@@ -15,7 +15,7 @@
     <div class="card">
         <div class="card-content">
             <span class="card-title">Request a Recommendation</span>
-            <form action="/requestRec" method="POST">
+            <form action="/recommendation_request" method="POST">
                 <div class="row">
                     <div classs="input-field">
                         <label for="staffID">Staff</label>

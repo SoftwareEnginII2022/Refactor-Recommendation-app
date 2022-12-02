@@ -36,14 +36,14 @@ def get_staff_by_firstName(firstName):
 def get_staff_by_lastName(lastName):
     staff=Staff.query.filter_by(lastName=lastName).all()
     staff = [staf.toJSON() for staf in staff]
-    if staff == []:
+    if not staff:
         return None
     return jsonify(staff)
 
 def get_staff_by_name(firstName, lastName):
     staff=Staff.query.filter_by(firstName=firstName, lastName=lastName).all()
     staff = [staf.toJSON() for staf in staff]
-    if staff == []:
+    if not staff:
         return None
     return jsonify(staff)
     

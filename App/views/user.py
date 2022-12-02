@@ -17,7 +17,7 @@ user_views = Blueprint('user_views', __name__, template_folder='../templates')
 
 # SIGNUP - CREATE ACCOUNT
 @user_views.route('/signup', methods=['POST'])
-def signupAction():
+def signup_action():
     data = request.form  # get data from form submission
     if (data['userType'] == "student") or (data['userType'] == "staff"):
         newuser = create_user(data['email'],
@@ -34,7 +34,7 @@ def signupAction():
         db.session.commit()  # save user
         login_user(newuser)  # login the user
         flash(data['userType'].capitalize() + 'Account Created!')  # send message
-        return redirect('/app')  # redirect to homepage
+        return redirect(url_for('index_views.homepage'))  # redirect to homepage
     except IntegrityError:  # attempted to insert a duplicate user
         db.session.rollback()
         flash("Email already exists")  # error message
@@ -42,13 +42,13 @@ def signupAction():
 
 # Login User
 @user_views.route('/login', methods=['POST'])
-def loginAction():
+def login_action():
     data = request.form
     user = get_user_by_email(data['email'])
     if user and user.check_password(data['password']):  # check credentials
         flash('Logged in successfully.')  # send message to next page
         login_user(user)  # login the user
-        return redirect('/app')  # redirect to main page if login successful
+        return redirect(url_for('index_views.homepage'))  # redirect to main page if login successful
     else:
         flash('Invalid email or password')  # send message to next page
     return redirect(url_for('index_views.login_page'))
