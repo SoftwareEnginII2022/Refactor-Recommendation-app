@@ -24,6 +24,11 @@ def create_recommendation_action():
     reqDetails = data.get("reqDetails", "-1,")
     [reqID, studentName, *z] = reqDetails.split(",") + nones
 
+    print(reqID)
+    print(studentName)
+    print(reqDetails)
+    print(data['comments'])
+
     created_rec = create_recommendation(reqID, current_user.id, data['comments'])
     
     if created_rec:
