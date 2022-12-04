@@ -27,8 +27,6 @@ def home_page():
 
     elif get_student(userID):
         requests = get_student_requests(userID)
-        print("stf")
-        print(requests)
         teachers = get_staff_names()
         return render_template('request/index.html',requests = requests, teachers = teachers, today = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d'))
 

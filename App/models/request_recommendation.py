@@ -10,6 +10,7 @@ class Status(Enum):
     REJECTED = "Rejected"
     COMPLETED = "Completed"
     EXPIRED = "Expired"
+    CANCELLED = "Cancelled"
 
 class Request_Recommendation(db.Model):
     __tablename__ = "request_recommendation"
@@ -56,9 +57,11 @@ class Request_Recommendation(db.Model):
                 self.status = Status(status)
                 db.session.add(self)
                 db.session.commit()
+                return True
+        return False
     
     def reject_expired_request(self):
-        if (self.deadline < datetime.today()) and (self.status ==  Status.PENDING or self.status ==  Status.ACCEPTED):
+        if (self.deadline < datetime.today()) and (self.status in [Status.PENDING, Status.ACCEPTED]):
             self.status = Status.EXPIRED
             db.session.add(self)
             db.session.commit()
@@ -68,3 +71,11 @@ class Request_Recommendation(db.Model):
             self.status = Status.COMPLETED
             db.session.add(self)
             db.session.commit()
+    
+    def cancel_request(self):
+        if (self.status in [Status.PENDING, Status.ACCEPTED]):
+            self.status = Status.CANCELLED
+            db.session.add(self)
+            db.session.commit()
+            return True
+        return False

@@ -25,7 +25,8 @@
                     <td>
                         <span {% if status=="ACCEPTED" %} class="chip green-text" {% elif status=="REJECTED" %}
                             class="chip red-text" {% elif status=="COMPLETED" %} class="chip blue-text" {% elif
-                            status=="EXPIRED" %} class="chip grey-text" {% else %} class="chip" {% endif %}>
+                            status=="EXPIRED" %} class="chip grey-text" {% elif status=="CANCELLED" %}
+                            class="chip yellow-text text-darken-4" {% else %} class="chip" {% endif %}>
                             {{ status }}
                         </span>
                     </td>

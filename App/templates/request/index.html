@@ -75,7 +75,8 @@
                     <td>{{ req.deadline.strftime('%Y-%m-%d') }}</td>
                     <td><span {% if status=="ACCEPTED" %} class="chip green-text" {% elif status=="REJECTED" %}
                             class="chip red-text" {% elif status=="COMPLETED" %} class="chip blue-text" {% elif
-                            status=="EXPIRED" %} class="chip grey-text" {% else %} class="chip" {% endif %}>
+                            status=="EXPIRED" %} class="chip grey-text" {% elif status=="CANCELLED" %}
+                            class="chip yellow-text text-darken-4" {% else %} class="chip" {% endif %}>
                             {{ status }}
                         </span></td>
 
@@ -84,8 +85,13 @@
                         <a class="waves-effect waves-light btn {{ colour_theme }}"
                             href="/recommendation/{{ req.Recommendation.recID }}">View</a>
                     </td>
+                    {% elif status == "ACCEPTED" or status == "PENDING" %}
+                    <td>
+                        <a class="waves-effect waves-light btn red"
+                            href="/recommendation_request/{{ req.reqID }}/cancel">Cancel</a>
+                    </td>
                     {% else %}
-                    <td><a class="waves-effect waves-light btn {{ colour_theme }}" href="#" disabled>View</a></td>
+                    <td></td>
                     {% endif %}
                 </tr>
                 <tr>

@@ -50,3 +50,10 @@ def reject_request(reqID):
     if req:
         return req.set_status(Status.REJECTED.value)
     return False
+
+
+def cancel_request(reqID):
+    req = get_request(reqID)
+    if req:
+        return req.cancel_request()
+    return False

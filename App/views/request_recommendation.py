@@ -10,6 +10,7 @@ from App.controllers import (
     get_staff,
     accept_request,
     reject_request,
+    cancel_request,
     get_notification_by_request
 )
 
@@ -35,8 +36,10 @@ def view_notif(reqID):
 @login_required
 def accept_request_action(reqID):
     if get_staff(current_user.id):
-        accept_request(reqID)
-        flash("Recommendation request accepted")
+        if not accept_request(reqID):
+            flash("Recommendation request could not be accepted")
+        else:
+            flash("Recommendation request accepted")
         return redirect(session.get('notif_url', url_for('index_views.home_page')))
     flash("You cannot perform this action")
     return redirect(url_for('index_views.home_page'))
@@ -46,12 +49,30 @@ def accept_request_action(reqID):
 @login_required
 def reject_request_action(reqID):
     if get_staff(current_user.id):
-        reject_request(reqID)
-        flash("Recommendation request rejected")
+        if not reject_request(reqID):
+            flash("Recommendation request coult not be rejected")
+        else:
+            flash("Recommendation request rejected")
+            
         if 'notif_url' in session:
             return redirect(session['notif_url'])
         else:
             return redirect(url_for('index_views.home_page'))
+    flash("You cannot perform this action")
+    return redirect(url_for('index_views.home_page'))
+
+# Cancel request by ID
+@request_reccommendation_views.route('/recommendation_request/<reqID>/cancel', methods=['GET'])
+@login_required
+def cancel_request_action(reqID):
+    if get_student(current_user.id):
+        if not cancel_request(reqID):
+            flash("Recommendation request coult not be cancelled")
+        else:
+            flash("Recommendation request cancelled")
+            
+        return redirect(url_for('index_views.home_page'))
+
     flash("You cannot perform this action")
     return redirect(url_for('index_views.home_page'))
 
