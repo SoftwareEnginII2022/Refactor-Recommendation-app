@@ -56,5 +56,6 @@ def create_recommendation_action():
         flash("Recommendation successfully created for " + studentName)
     else:
         flash("Could not create recommendation.")
+        return redirect(url_for("index_views.home_page"))
 
-    return redirect(url_for("index_views.home_page"))
+    return redirect(session.get('notif_url', url_for('index_views.home_page')))

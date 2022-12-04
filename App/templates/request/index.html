@@ -45,8 +45,8 @@
                     </div>
 
                     <div classs="card-action">
-                        <input type="submit" class="green text-white btn" value="Request" {% if not teachers %} disabled
-                            {% endif %}>
+                        <input type="submit" class="{{ colour_theme }} text-white btn" value="Request" {% if not
+                            teachers %} disabled {% endif %}>
                     </div>
 
                 </div>
@@ -60,7 +60,6 @@
             <thead>
                 <tr>
                     <th>To</th>
-                    <!-- <th>Message</th> -->
                     <th>Date Requested</th>
                     <th>Deadline</th>
                     <th>Status</th>
@@ -82,11 +81,11 @@
 
                     {% if req.Recommendation %}
                     <td>
-                        <a class="waves-effect waves-light btn green"
+                        <a class="waves-effect waves-light btn {{ colour_theme }}"
                             href="/recommendation/{{ req.Recommendation.recID }}">View</a>
                     </td>
                     {% else %}
-                    <td><a class="waves-effect waves-light btn green" href="#" disabled>View</a></td>
+                    <td><a class="waves-effect waves-light btn {{ colour_theme }}" href="#" disabled>View</a></td>
                     {% endif %}
                 </tr>
                 <tr>

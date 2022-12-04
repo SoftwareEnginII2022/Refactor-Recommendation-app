@@ -31,3 +31,13 @@ def get_recommendation(recID):
     rec.Student = get_student(rec_req.studentID)
 
     return rec
+
+def get_recommendation_by_request(reqID):
+    rec = Recommendation.query.filter_by(reqID=reqID).first()
+
+    if not rec:
+        return None
+        
+    rec.Staff = get_staff(rec.staffID)
+
+    return rec

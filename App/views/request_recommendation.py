@@ -5,6 +5,7 @@ from flask_login import login_required, current_user
 from App.controllers import (
     create_request,
     get_student,
+    get_recommendation_by_request,
     set_notification_seen,
     get_staff,
     accept_request,
@@ -22,8 +23,9 @@ def view_notif(reqID):
     if get_staff(current_user.id):
         notif = get_notification_by_request(reqID)
         notif = set_notification_seen(notif)
+        recommendation = get_recommendation_by_request(reqID)
         session['notif_url'] = url_for('request_reccommendation_views.view_notif', reqID=reqID)
-        return render_template('request/view.html', notif=notif)
+        return render_template('request/view.html', notif=notif, recommendation=recommendation)
     flash("You cannot view that page.")
     return redirect(url_for('index_views.home_page'))
 

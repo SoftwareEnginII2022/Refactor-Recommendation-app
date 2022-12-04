@@ -12,7 +12,6 @@
 
 {% block content %}
 <main class="container">
-
     <div class="card">
         <div class="card-content">
             <span class="card-title">Create Recommendation</span>
@@ -42,8 +41,8 @@
                 </div>
 
                 <div classs="card-action">
-                    <input class="btn green white-text" type="submit" value="Create" {% if not accepted_req_students %}
-                        disabled {% endif %} />
+                    <input class="btn {{ colour_theme }} white-text" type="submit" value="Create" {% if not
+                        accepted_req_students %} disabled {% endif %} />
                 </div>
             </form>
         </div>
@@ -63,13 +62,13 @@
             <tbody>
                 {% for notif in notifs|reverse %}
                 {% set status = notif.Request_Recommendation.status.value.upper() %}
-                <tr {% if not notif.seen %} class="green accent-1" {% endif %}>
+                <tr {% if not notif.seen %} class="{{ colour_theme }} accent-1" {% endif %}>
                     <td>{{ notif.Student.getName() }}</td>
                     <td>
                         {{ notif.Request_Recommendation.deadline.strftime('%Y-%m-%d') }}
                     </td>
                     <td>
-                        <a class="waves-effect waves-light btn green"
+                        <a class="waves-effect waves-light btn {{ colour_theme }}"
                             href="/recommendation_request/{{notif.reqID}}">View</a>
                     </td>
                     <td>

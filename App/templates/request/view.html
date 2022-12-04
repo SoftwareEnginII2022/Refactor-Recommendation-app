@@ -35,7 +35,7 @@
                 </tr>
             </tbody>
         </table>
-        <p>{{ notif.Request_Recommendation.requestBody }}</p>
+        <p style="white-space: pre-wrap;">{{ notif.Request_Recommendation.requestBody }}</p>
         <table>
             <tbody>
                 <tr>
@@ -43,7 +43,7 @@
                             href="/recommendation_request/{{notif.reqID}}/accept" {% if cannotModify %} disabled {%
                             endif %}>Accept</a>
                     </td>
-                    <td><a class="waves-effect waves-light btn green"
+                    <td><a class="waves-effect waves-light btn red"
                             href="/recommendation_request/{{notif.reqID}}/reject" {% if cannotModify %} disabled {%
                             endif %}>Reject</a>
                     </td>
@@ -71,9 +71,35 @@
                 </div>
 
                 <div classs="card-action">
-                    <input class="btn green white-text" type="submit" value="Create" />
+                    <input class="btn {{ colour_theme }} white-text" type="submit" value="Create" />
                 </div>
             </form>
+        </div>
+    </div>
+    {% elif status=="COMPLETED" and recommendation %}
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Your Recommendation Comments</span>
+            <div>
+                <div>
+                    <p style="white-space: pre-wrap;">{{ recommendation.comments }}</p>
+                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <b>To: </b>{{ notif.Student.getName() }}
+                            </td>
+                            <td>
+                                <b>From: </b>{{ recommendation.Staff.getName() }}
+                            </td>
+                            <td>
+                                <b>Created: </b>{{ recommendation.dateSubmitted.strftime('%Y-%m-%d') }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     {% endif %}

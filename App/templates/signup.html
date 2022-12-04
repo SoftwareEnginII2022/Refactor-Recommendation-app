@@ -46,22 +46,35 @@
         </div>
         <div class="row">
             <div class="col s12">
-                <p>
-                    <label>
-                        <input class="with-gap" type="radio" id="type_student" name="userType" value="student" checked>
-                        <span>Student</span>
-                    </label>
-                </p>
-                <p>
-                    <label>
-                        <input class="with-gap" type="radio" id="type_staff" name="userType" value="staff">
-                        <span>Staff</span>
-                    </label>
-                </p>
+                <label>User Type</label>
+                <table class="centered">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p>
+                                    <label>
+                                        <input class="with-gap" type="radio" id="type_student" name="userType"
+                                            value="student" checked>
+                                        <span>Student</span>
+                                    </label>
+                                </p>
+                            </td>
+                            <td>
+                                <p>
+                                    <label>
+                                        <input class="with-gap" type="radio" id="type_staff" name="userType"
+                                            value="staff">
+                                        <span>Staff</span>
+                                    </label>
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="card-action">
-            <input type="submit" class="green text-white btn" value="Sign Up">
+            <input type="submit" class="{{ colour_theme }} text-white btn" value="Sign Up">
         </div>
 
     </form>

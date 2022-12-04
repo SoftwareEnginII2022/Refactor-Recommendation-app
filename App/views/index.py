@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, send_from_directory, url_for, flash
+from flask import Blueprint, redirect, render_template, request, send_from_directory, url_for, flash, session
 from datetime import datetime, timedelta
 from flask_login import login_required, current_user
 
@@ -22,6 +22,7 @@ def home_page():
     if get_staff(userID):
         notifs = get_staff_notifications(userID)
         accepted_req_students=get_accepted_request_by_staffID(userID)
+        session['notif_url'] = url_for('index_views.home_page')
         return render_template('notif/index.html', notifs=notifs, accepted_req_students=accepted_req_students)
 
     elif get_student(userID):

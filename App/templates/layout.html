@@ -15,8 +15,17 @@
 </head>
 
 <body>
+  {% if current_user and current_user.is_authenticated %}
+  {% if current_user.getType() == "student" %}
+  {% set colour_theme = "green" %}
+  {% elif current_user.getType() == "staff" %}
+  {% set colour_theme = "blue" %}
+  {% endif %}
+  {% else %}
+  {% set colour_theme = "orange" %}
+  {% endif %}
   <header>
-    <nav class="green">
+    <nav class="{{ colour_theme }}">
       <div class="nav-wrapper">
         <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
         <div class="nav-wrapper">
@@ -48,7 +57,7 @@
   </main>
 
 
-  <footer style="padding-top: 0;" class="green page-footer">
+  <footer style="padding-top: 0;" class="{{ colour_theme }} page-footer">
     <div class="footer-copyright">
       <div class="container">
         © 2022 LACK Recommendation Application
