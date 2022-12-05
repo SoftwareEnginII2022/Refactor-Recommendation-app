@@ -1,15 +1,24 @@
 from App.models import User, Student, Staff
 from App.database import db
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import SQLAlchemyError
 from flask import Response
 
 # Create new User
 def create_user(email, password, userType, firstName, lastName):
-    if (userType=="student"):
-        newuser = Student(email=email, password=password, firstName=firstName, lastName=lastName)
-    elif (userType=="staff"):
-        newuser = Staff(email=email, password=password, firstName=firstName, lastName=lastName)
-    return newuser
+    try:
+        if (userType=="student"):
+            newuser = Student(email=email, password=password, firstName=firstName, lastName=lastName)
+        elif (userType=="staff"):
+            newuser = Staff(email=email, password=password, firstName=firstName, lastName=lastName)
+        else:
+            newuser = User(email=email, password=password, firstName=firstName, lastName=lastName)
+
+        db.session.add(newuser)
+        db.session.commit()
+        return newuser
+    except SQLAlchemyError:
+        db.session.rollback()
+        return None
 
 
 # get User by id

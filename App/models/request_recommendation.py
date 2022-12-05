@@ -41,7 +41,6 @@ class Request_Recommendation(db.Model):
             'deadline': self.deadline,
             'status': self.status.value,
             'requestBody': self.requestBody,
-            'status': self.status.value,
             'recommendation': self.Recommendation.toJSON() if self.Recommendation else None
         }
     
@@ -52,8 +51,7 @@ class Request_Recommendation(db.Model):
     
     def set_status(self, status):        
         if self.status == Status.PENDING:
-            values = [item.value for item in Status]
-            if status in values:
+            if status in Status:
                 self.status = Status(status)
                 db.session.add(self)
                 db.session.commit()
