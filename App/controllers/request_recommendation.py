@@ -41,14 +41,14 @@ def get_accepted_request_by_staffID(staffID):
 def accept_request(reqID):
     req = get_request(reqID)
     if req:
-        return req.set_status(Status.ACCEPTED.value)
+        return req.set_status(Status.ACCEPTED)
     return False
 
 
 def reject_request(reqID):
     req = get_request(reqID)
     if req:
-        return req.set_status(Status.REJECTED.value)
+        return req.set_status(Status.REJECTED)
     return False
 
 

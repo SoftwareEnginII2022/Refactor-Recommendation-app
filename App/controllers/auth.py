@@ -1,9 +1,9 @@
 import flask_login
 from flask_jwt import JWT
-from App.models import User
+from App.models import User, Student
 
 def authenticate(email, password):
-    user = User.query.filter_by(email=email).first()
+    user = Student.query.filter_by(email=email).first()
     if user and user.check_password(password):
         return user
     return None

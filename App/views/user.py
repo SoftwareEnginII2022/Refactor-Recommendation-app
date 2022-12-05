@@ -45,13 +45,11 @@ def signup_action():
 
     newuser = create_user(email, password, userType, firstName, lastName)  # create user object
     
-    try:
-        db.session.add(newuser)
-        db.session.commit()  # save user
+    if newuser:
         login_user(newuser)  # login the user
         flash(userType.capitalize() + 'Account Created! ' + newuser.getName() + " has been logged in successfully.")  # send message
         return redirect(url_for('index_views.home_page'))  # redirect to homepage
-    except IntegrityError:  # attempted to insert a duplicate user
+    else:  # attempted to insert a duplicate user
         db.session.rollback()
         flash("Email already exists")  # error message
     return redirect(url_for('index_views.signup_page'))
