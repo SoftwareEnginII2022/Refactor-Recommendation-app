@@ -18,7 +18,7 @@ def signup_action():
     data = request.form  # get data from form submission
     userType = data.get('userType', "User")
     if (userType != "student") and (userType != "staff"):
-        flash("Invalid account type: " + userType)
+        flash("Please sign up as either staff or student")
         return redirect(url_for('index_views.signup_page'))
 
     email = data.get('email')

@@ -1,5 +1,14 @@
 <!doctype html>
 <html>
+{% if current_user and current_user.is_authenticated %}
+{% if current_user.getType() == "student" %}
+{% set colour_theme = "green" %}
+{% elif current_user.getType() == "staff" %}
+{% set colour_theme = "blue" %}
+{% endif %}
+{% else %}
+{% set colour_theme = "orange" %}
+{% endif %}
 
 <head>
 
@@ -9,28 +18,23 @@
   <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <!--Let browser know website is optimized for mobile-->
+  <link rel="icon" type="image/png" href="/static/favicons/favicon-{{ colour_theme }}.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}{% endblock %}</title>
 
 </head>
 
 <body>
-  {% if current_user and current_user.is_authenticated %}
-  {% if current_user.getType() == "student" %}
-  {% set colour_theme = "green" %}
-  {% elif current_user.getType() == "staff" %}
-  {% set colour_theme = "blue" %}
-  {% endif %}
-  {% else %}
-  {% set colour_theme = "orange" %}
-  {% endif %}
   <header>
     <nav class="{{ colour_theme }}">
       <div class="nav-wrapper">
         <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
         <div class="nav-wrapper">
           <ul id="nav-mobile" class="left">
-            <li><a href="/">Home</a></li>
+            <li><a style="height: 64px" href="/">
+                <img style="height: 52px; margin-top: 6px;" src="/static/images/logo-{{ colour_theme }}.png"
+                  alt="Stafferral Logo">
+              </a></li>
           </ul>
           {% block link %}{% endblock %}
         </div>
@@ -60,7 +64,7 @@
   <footer style="padding-top: 0;" class="{{ colour_theme }} page-footer">
     <div class="footer-copyright">
       <div class="container">
-        © 2022 LACK Recommendation Application
+        © 2022 STAFFERRAL
       </div>
     </div>
   </footer>
