@@ -169,17 +169,15 @@ def recommend_test_commands(type):
     else:
         sys.exit(pytest.main(["-k", "Recommendation and not Request"]))
 
-        
-
-# @test.command("user", help="Run User tests")
-# @click.argument("type", default="all")
-# def user_tests_command(type):
-#     if type == "unit":
-#         sys.exit(pytest.main(["-k", "UserUnitTests"]))
-#     elif type == "int":
-#         sys.exit(pytest.main(["-k", "UserIntegrationTests"]))
-#     else:
-#         sys.exit(pytest.main(["-k", "App"]))
+@test.command("notification", help="Run Request Recommendation tests")
+@click.argument("type", default="all")
+def notification_tests_command(type):
+    if type == "unit":
+        sys.exit(pytest.main(["-k", "NotificationUnitTests"]))
+    elif type == "int":
+        sys.exit(pytest.main(["-k", "NotificationIntegrationTests"]))
+    else:
+        sys.exit(pytest.main(["-k", "Notification"]))
     
 
 app.cli.add_command(test)
