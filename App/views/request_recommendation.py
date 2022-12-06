@@ -17,7 +17,7 @@ from App.controllers import (
 request_reccommendation_views = Blueprint('request_reccommendation_views', __name__, template_folder='../templates')
 
 
-# View notification by ID
+# View request by ID
 @request_reccommendation_views.route('/recommendation_request/<reqID>', methods=['GET'])
 @login_required
 def view_notif(reqID):
@@ -76,6 +76,7 @@ def cancel_request_action(reqID):
     flash("You cannot perform this action")
     return redirect(url_for('index_views.home_page'))
 
+# Create request
 @request_reccommendation_views.route('/recommendation_request', methods=['POST'])
 @login_required
 def new_request():
