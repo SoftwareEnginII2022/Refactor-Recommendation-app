@@ -4,12 +4,9 @@ from sqlalchemy.exc import IntegrityError
 from App.controllers import get_user
 from datetime import datetime
 
-def create_notification(reqID,staffID,deadline):
-    newNotif = Notification(reqID=reqID,staffID=staffID, timestamp=deadline)
-    return newNotif
-
 def populate_notification(notif):
-    notif.Student = get_user(notif.Request_Recommendation.studentID)
+    if notif and notif.Request_Recommendation:
+        notif.Student = get_user(notif.Request_Recommendation.studentID)
     return notif
 
 def check_expired_requests():

@@ -48,6 +48,7 @@ class Request_Recommendation(db.Model):
         notif = Notification(self.reqID, self.staffID)
         db.session.add(notif)
         db.session.commit()
+        return notif
     
     def set_status(self, status):        
         if self.status == Status.PENDING:
