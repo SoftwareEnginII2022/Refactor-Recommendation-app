@@ -59,13 +59,13 @@ class StaffIntegrationTests(unittest.TestCase):
         assert view_staff.lastName == staff.lastName
         assert view_staff.Notification == staff.Notification
   
-    # def test_get_staff_names(self):
-    #     staff = create_user("doctor@mendez.com", "pass", "staff", "Doctor","Mendez")
-    #     [a, view_staff, *z] = get_staff_names()
-    #     print(view_staff)
-    #     assert "id" not in view_staff
-    #     assert view_staff.staffID == staff.staffID
-    #     assert "email" not in view_staff
-    #     assert view_staff.firstName == staff.firstName
-    #     assert view_staff.lastName == staff.lastName
-    #     assert "Notification" not in view_staff
+    def test_get_staff_names(self):
+        staff = create_user("doctor@mendez.com", "pass", "staff", "Doctor","Mendez")
+        [a, view_staff, *z] = get_staff_names()
+        print(view_staff)
+        assert "id" not in view_staff
+        assert view_staff.staffID == staff.staffID
+        assert "email" not in view_staff
+        assert view_staff.firstName == staff.firstName
+        assert view_staff.lastName == staff.lastName
+        assert "Notification" not in view_staff
