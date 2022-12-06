@@ -157,7 +157,19 @@ def req_rec_tests_command(type):
     elif type == "int":
         sys.exit(pytest.main(["-k", "Request_RecommendationIntegrationTests"]))
     else:
-        sys.exit(pytest.main(["-k", "Request_Recommendation"]))
+       sys.exit(pytest.main(["-k", "Request_Recommendation"]))
+
+@test.command("recommend", help="Run all Recommendation test")
+@click.argument("type", default="all")
+def recommend_test_commands(type):
+    if type == "unit":
+         sys.exit(pytest.main(["-k", "RecommendationUnitTests and not Request"]))
+    elif type == "int":
+        sys.exit(pytest.main(["-k", "RecommendationIntegrationTests and not Request"]))
+    else:
+        sys.exit(pytest.main(["-k", "Recommendation and not Request"]))
+
+        
 
 # @test.command("user", help="Run User tests")
 # @click.argument("type", default="all")
