@@ -1,19 +1,12 @@
 from App.models import Notification, Request_Recommendation
 from App.database import db
 from sqlalchemy.exc import IntegrityError
-from App.controllers import get_user
-from datetime import datetime
+from App.controllers import get_user, check_expired_requests
 
 def populate_notification(notif):
     if notif and notif.Request_Recommendation:
         notif.Student = get_user(notif.Request_Recommendation.studentID)
     return notif
-
-def check_expired_requests():
-    req_recs = Request_Recommendation.query.filter(Request_Recommendation.deadline < datetime.today()).all()
-
-    for req_rec in req_recs:
-        req_rec.reject_expired_request()
 
 # gets a notification from a user's notif feed
 def get_staff_notifications(staffID):

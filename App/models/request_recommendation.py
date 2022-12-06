@@ -60,7 +60,8 @@ class Request_Recommendation(db.Model):
         return False
     
     def reject_expired_request(self):
-        if (self.deadline < datetime.today()) and (self.status in [Status.PENDING, Status.ACCEPTED]):
+        if (self.deadline.astimezone() < datetime.now().astimezone()) and (self.status in [Status.PENDING, Status.ACCEPTED]):
+            print("Rejecting")
             self.status = Status.EXPIRED
             db.session.add(self)
             db.session.commit()

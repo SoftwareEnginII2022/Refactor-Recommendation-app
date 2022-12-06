@@ -2,6 +2,7 @@ from App.models import Request_Recommendation, Student, Status
 from App.database import db
 from App.controllers import get_user, get_staff
 from sqlalchemy.exc import IntegrityError
+from datetime import datetime
 
 def create_request(staffID, studentID, deadline, requestBody):
     query = Request_Recommendation.query.filter(Request_Recommendation.staffID == staffID,Request_Recommendation.studentID == studentID, db.or_(Request_Recommendation.status == Status.PENDING, Request_Recommendation.status == Status.ACCEPTED)).all()
@@ -18,6 +19,7 @@ def create_request(staffID, studentID, deadline, requestBody):
     return None
 
 def get_student_requests(id):
+    check_expired_requests()
     requests = Request_Recommendation.query.filter_by(studentID = id).all()
     if not requests:
         return None
@@ -28,9 +30,11 @@ def get_student_requests(id):
     return requests
 
 def get_request(reqID):
+    check_expired_requests()
     return Request_Recommendation.query.get(reqID)
 
 def get_accepted_request_by_staffID(staffID):
+    check_expired_requests()
     requests = Request_Recommendation.query.filter(Request_Recommendation.status == (Status.ACCEPTED), staffID==staffID).all()
 
     for req in requests:
@@ -57,3 +61,9 @@ def cancel_request(reqID):
     if req:
         return req.cancel_request()
     return False
+
+def check_expired_requests():
+    req_recs = Request_Recommendation.query.filter(Request_Recommendation.deadline < datetime.today()).all()
+
+    for req_rec in req_recs:
+        req_rec.reject_expired_request()

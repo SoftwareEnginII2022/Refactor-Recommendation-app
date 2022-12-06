@@ -94,8 +94,8 @@ def new_request():
         invalid_messages.append("Please select valid lecturer.")
     if not deadline:
         invalid_messages.append("Please choose valid date.")
-    elif deadline < datetime.today():
-        invalid_messages.append("Please choose future deadline date.")
+    # elif deadline < datetime.today():
+    #     invalid_messages.append("Please choose future deadline date.")
     if not requestBody or  (type(requestBody) == str and not requestBody.strip()):
         invalid_messages.append("Please enter a description for your recommendation request. Blank descriptions are more likely to get declined.")
     
