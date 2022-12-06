@@ -169,8 +169,6 @@ def recommend_test_commands(type):
     else:
         sys.exit(pytest.main(["-k", "Recommendation and not Request"]))
 
-        
-
 @test.command("notification", help="Run Request Recommendation tests")
 @click.argument("type", default="all")
 def notification_tests_command(type):
