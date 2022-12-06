@@ -53,7 +53,7 @@ class NotificationIntegrationTests(unittest.TestCase):
         assert view_notif.seen == False
         assert view_notif.Request_Recommendation == req_rec
   
-    def test_set_notification_true(self):
+    def test_set_notification_seen(self):
         deadline = datetime.now() + timedelta(days=5)
         req_rec = create_request(0, 10, deadline, "Recommendation Please")
         view_notif = get_notification_by_request(req_rec.reqID)

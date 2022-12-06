@@ -65,7 +65,7 @@ class Request_RecommendationIntegrationTests(unittest.TestCase):
         assert view_req_rec.status == req_rec.status
         assert view_req_rec.Recommendation == req_rec.Recommendation
   
-    def test_create_request_stu_dent(self):
+    def test_get_stu_dent_request(self):
         deadline = datetime.now() + timedelta(days=5)
         req_rec = create_request(0, 2, deadline, "Recommendation Please")
         [view_req_rec] = get_student_requests(req_rec.studentID)
