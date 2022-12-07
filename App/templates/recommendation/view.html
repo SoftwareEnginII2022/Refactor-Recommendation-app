@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
-{% block title %}Recommendation{% endblock %}
+{% block title %}Stafferral | Recommendation{% endblock %}
+{% block ogtitle %}Stafferral | Recommendation{% endblock %}
 {% block page %}{{ recommendation.Staff.getName() }}'s Recommendation{% endblock %}
+{% block description %}View recommendation by {{ recommendation.Staff.getName() }}.{% endblock %}
+{% block ogdescription %}View recommendation by {{ recommendation.Staff.getName() }}.{% endblock %}
 
 {% block link%}
 <ul id="nav-mobile" class="left">
