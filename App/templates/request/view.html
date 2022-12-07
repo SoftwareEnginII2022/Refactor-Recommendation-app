@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
-{% block title %}Notification Feed{% endblock %}
+{% block title %}Stafferral | Request{% endblock %}
+{% block ogtitle %}Stafferral | Request{% endblock %}
 {% block page %}{{ notif.Student.getName() }}'s Recommendation Request{% endblock %}
+{% block description %}View {{ notif.Student.getName() }}'s request.{% endblock %}
+{% block ogdescription %}View {{ notif.Student.getName() }}'s request.{% endblock %}
 
 {% block link%}
 <ul id="nav-mobile" class="left">
