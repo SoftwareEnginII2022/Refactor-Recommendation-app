@@ -38,3 +38,7 @@ def login_page():
 @index_views.route('/signup', methods=['GET'])
 def signup_page():
     return render_template('signup.html')
+
+@index_views.route('/healthz', methods=['GET'])
+def render_health_check_path():
+    return {}
